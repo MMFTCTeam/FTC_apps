@@ -47,6 +47,7 @@ public class RobotMethodLibraries extends OpMode {
         Tom,
         Sparkles,
         TooManyCats,
+        I_HATE_WORKING
         // Add more Presets here
     }
 
