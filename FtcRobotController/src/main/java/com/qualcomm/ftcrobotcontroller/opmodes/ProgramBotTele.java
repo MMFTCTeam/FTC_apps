@@ -13,11 +13,10 @@ public class ProgramBotTele extends OpMode {
     private boolean dead = true;
     private boolean Ltdead = true;
     private boolean RtDead = true;
-    private RobotMethodLibraries rml = new RobotMethodLibraries();
+    private RobotMethodLibraries rml = new RobotMethodLibraries(RobotMethodLibraries.Preset.Tom);
     private double steer;
     private double throttle;
     public void init() {
-        rml.Init_Motors(RobotMethodLibraries.Preset.ProgramBot);
     }
     public void loop() {
         while (true) {
