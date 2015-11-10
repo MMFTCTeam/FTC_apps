@@ -8,12 +8,11 @@ import com.qualcomm.robotcore.util.Range;
  * Created by sam on 17-Oct-15.
  */
 public class ProgramBotTeleTank extends OpMode {
-    RobotMethodLibraries rml = new RobotMethodLibraries();
+    RobotMethodLibraries rml = new RobotMethodLibraries(RobotMethodLibraries.Preset.Tom);
     private double Lthrottle;
     private double Rthrottle;
     @Override
     public void init() {
-        rml.Init_Motors(RobotMethodLibraries.Preset.Tom);
     }
     @Override
     public void loop() {
