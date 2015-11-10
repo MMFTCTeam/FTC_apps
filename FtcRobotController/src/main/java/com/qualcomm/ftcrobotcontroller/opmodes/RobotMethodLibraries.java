@@ -28,12 +28,6 @@ public class RobotMethodLibraries extends OpMode {
     public Servo Rbump;
     public ColorSensor CL;
     /**
-     * I'm a constructor so you can instantiate me!
-     */
-    public RobotMethodLibraries() {
-
-    }
-    /**
      * enum presets
      */
     public enum Preset {
@@ -52,9 +46,9 @@ public class RobotMethodLibraries extends OpMode {
     }
 
     /**
-     * no parameters means default values
+     * Im a Constructor
      */
-    public void Init_Motors() {
+    public RobotMethodLibraries() {
         FL = hardwareMap.dcMotor.get("FL");
         FR = hardwareMap.dcMotor.get("FR");
         BL = hardwareMap.dcMotor.get("BL");
@@ -84,7 +78,7 @@ public class RobotMethodLibraries extends OpMode {
     /**
      * if you don't want to use the defaults, define and use a preset
      */
-    public void Init_Motors(Preset p) {
+    public RobotMethodLibraries(Preset p) {
         if (p == Preset.ProgramBot) {
             FL = hardwareMap.dcMotor.get("FL");
             FR = hardwareMap.dcMotor.get("FR");
@@ -144,12 +138,6 @@ public class RobotMethodLibraries extends OpMode {
      * @since 1.0
      * use Init_motors() or Init_motors(Preset p)
      */
-    public final void Init_Motors(String M1, String M2, String M3/*, String Mc1*/) {
-        FL = hardwareMap.dcMotor.get(M1);
-        FR = hardwareMap.dcMotor.get(M2);
-        OtherMotor = hardwareMap.dcMotor.get(M3);
-        // Dcm = hardwareMap.dcMotorController.get(Mc1);
-    }
 
     public final double scaleInput(double dVal) {
         double[] scaleArray = {0.0, 0.05, 0.09, 0.10, 0.12, 0.15, 0.18, 0.24, 0.30, 0.36, 0.43, 0.50, 0.60, 0.72, 0.85, 1.00, 1.00};
