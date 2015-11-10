@@ -23,6 +23,9 @@ Thumbs.db
 .idea
 .gradle
 build/
-
+# gitignore itself
+.gitignore
+# opmode register
+FtcOpModeRegister.java
 *ASUS_PC_01*
 
