@@ -31,6 +31,7 @@ public class EncoderTest extends OpMode {
         OtherMotor = hardwareMap.dcMotor.get("m5");
         Rbump = hardwareMap.servo.get("s1");
         Lbump = hardwareMap.servo.get("s2");
+        OtherMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         OtherMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
     }
 
