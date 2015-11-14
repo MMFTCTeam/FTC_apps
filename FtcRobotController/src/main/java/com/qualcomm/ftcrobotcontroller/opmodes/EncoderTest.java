@@ -50,5 +50,6 @@ public class EncoderTest extends OpMode {
             OtherMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         }
         reset = false;
+        telemetry.addData("MotorPower", OtherMotor.getPower());
     }
 }
