@@ -20,6 +20,7 @@ public class EncoderTest extends OpMode {
     // public ServoController sr;
     public Servo Lbump;
     public Servo Rbump;
+    boolean reset;
     // DcMotorController dc = OtherMotor.getController();
 
     @Override
@@ -37,11 +38,17 @@ public class EncoderTest extends OpMode {
 
     @Override
     public void loop() {
+        telemetry.addData("Resetting",reset);
         OtherMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         long encoderRead = OtherMotor.getCurrentPosition();
         double throttle = gamepad1.right_stick_y;
         Range.clip(throttle, -1, 1);
         OtherMotor.setPower(throttle);
         telemetry.addData("Encoder", encoderRead);
+        if (gamepad1.left_bumper) {
+            reset = true;
+            OtherMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        }
+        reset = false;
     }
 }
