@@ -16,6 +16,7 @@ local.properties
 Thumbs.db
 
 # OSX files
+/Encoder_Test_Patch_1_0.patch
 .DS_Store
 
 # Android Studio
@@ -26,6 +27,5 @@ build/
 # gitignore itself
 .gitignore
 # opmode register
-FtcOpModeRegister.java
+FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/FtcOpModeRegister.java
 *ASUS_PC_01*
-
