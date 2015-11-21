@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.util.Range;
 /**
  * Change
  * Created by sam on 31-Oct-15.
+ * @deprecated
  */
 public class EncoderTest extends OpMode {
     public DcMotor FL;
