@@ -3,6 +3,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
+import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 /**
@@ -17,6 +18,8 @@ public class TeleOpus extends OpMode {
     // public ServoController sr;
     public Servo Lbump;
     public Servo Rbump;
+    public OpticalDistanceSensor OD;
+
 
     @Override
     public void init() {
@@ -27,6 +30,7 @@ public class TeleOpus extends OpMode {
         OtherMotor = hardwareMap.dcMotor.get("m5");
         Rbump = hardwareMap.servo.get("s1");
         Lbump = hardwareMap.servo.get("s2");
+        OD = hardwareMap.opticalDistanceSensor.get("a0");
         BL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         BL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         FL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
@@ -37,8 +41,8 @@ public class TeleOpus extends OpMode {
         FR.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         OtherMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         OtherMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        BR.setDirection(DcMotor.Direction.REVERSE);
-        FL.setDirection(DcMotor.Direction.REVERSE);
+        BL.setDirection(DcMotor.Direction.REVERSE);
+        FR.setDirection(DcMotor.Direction.REVERSE);
         Rbump.setPosition(1);
         Lbump.setPosition(0);
     }
@@ -56,7 +60,28 @@ public class TeleOpus extends OpMode {
         BL.setPower(Lthrottle);
         FR.setPower(Rthrottle);
         BR.setPower(Rthrottle);
-        OtherMotor.setPower(gamepad1.right_trigger);
-        OtherMotor.setPower(-gamepad1.left_trigger);
+        if(gamepad1.back) {
+            OD.enableLed(true);
+        }
+        if (gamepad1.a) {
+            OtherMotor.setPower(0);
+        }
+        if (gamepad1.dpad_up) {
+            OtherMotor.setPower(1);
+        }
+        if (gamepad1.dpad_down) {
+            OtherMotor.setPower(-1);
+        }
+        if (gamepad1.left_bumper) {
+            Rbump.setPosition(0);
+            Lbump.setPosition(1);
+        }
+        if (gamepad1.right_bumper) {
+            Lbump.setPosition(0);
+            Rbump.setPosition(1);
+        }
+        telemetry.addData("Power", OtherMotor.getPower());
+        telemetry.addData("Distance", OD.getLightDetected());
+        telemetry.addData("Distance Raw", OD.getLightDetectedRaw());
     }
 }
