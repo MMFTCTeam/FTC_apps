@@ -1,6 +1,7 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
@@ -19,6 +20,7 @@ public class TeleOpus extends OpMode {
     public Servo Lbump;
     public Servo Rbump;
     public OpticalDistanceSensor OD;
+    public ColorSensor Light;
 
 
     @Override
@@ -31,6 +33,7 @@ public class TeleOpus extends OpMode {
         Rbump = hardwareMap.servo.get("s1");
         Lbump = hardwareMap.servo.get("s2");
         OD = hardwareMap.opticalDistanceSensor.get("a0");
+        Light = hardwareMap.colorSensor.get("Color");
         BL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         BL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         FL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
@@ -84,6 +87,15 @@ public class TeleOpus extends OpMode {
             Lbump.setPosition(0);
             Rbump.setPosition(1);
         }
+        if (gamepad1.y) {
+            Light.enableLed(true);
+        }
+        if (gamepad1.x) {
+            Light.enableLed(false);
+        }
+        telemetry.addData("Color Sensor Red", Light.red());
+        telemetry.addData("Color Sensor Green", Light.green());
+        telemetry.addData("Color Sensor Blue", Light.blue());
         telemetry.addData("Power", OtherMotor.getPower());
         telemetry.addData("Distance", OD.getLightDetected());
         telemetry.addData("Distance Raw", OD.getLightDetectedRaw());
