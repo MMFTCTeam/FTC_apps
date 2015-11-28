@@ -43,6 +43,7 @@ public class TeleOpus extends OpMode {
         OtherMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         BL.setDirection(DcMotor.Direction.REVERSE);
         FR.setDirection(DcMotor.Direction.REVERSE);
+        gamepad1.setJoystickDeadzone(0.02f);
         Rbump.setPosition(1);
         Lbump.setPosition(0);
     }
@@ -62,6 +63,9 @@ public class TeleOpus extends OpMode {
         BR.setPower(Rthrottle);
         if(gamepad1.back) {
             OD.enableLed(true);
+        }
+        else if (gamepad1.dpad_left) {
+            OD.enableLed(false);
         }
         if (gamepad1.a) {
             OtherMotor.setPower(0);
