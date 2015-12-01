@@ -21,7 +21,9 @@ public class TeleOpus extends OpMode {
     public Servo Rbump;
     public OpticalDistanceSensor OD;
     public ColorSensor Light;
-
+    double Lthrottle = gamepad1.left_stick_y;
+    double Rthrottle = gamepad1.right_stick_y;
+    boolean enabled = false;
 
     @Override
     public void init() {
@@ -58,16 +60,13 @@ public class TeleOpus extends OpMode {
         BR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         FR.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
         OtherMotor.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-        double Lthrottle = gamepad1.left_stick_y;
-        double Rthrottle = gamepad1.right_stick_y;
         FL.setPower(Lthrottle);
         BL.setPower(Lthrottle);
         FR.setPower(Rthrottle);
         BR.setPower(Rthrottle);
-        if(gamepad1.back) {
+        if (gamepad1.back) {
             OD.enableLed(true);
-        }
-        else if (gamepad1.dpad_left) {
+        } else if (gamepad1.dpad_left) {
             OD.enableLed(false);
         }
         if (gamepad1.a) {
@@ -88,14 +87,18 @@ public class TeleOpus extends OpMode {
             Rbump.setPosition(1);
         }
         if (gamepad1.y) {
+            enabled = true;
             Light.enableLed(true);
         }
         if (gamepad1.x) {
+            enabled = false;
             Light.enableLed(false);
         }
+        telemetry.addData("Lights On?", enabled);
         telemetry.addData("Color Sensor Red", Light.red());
         telemetry.addData("Color Sensor Green", Light.green());
         telemetry.addData("Color Sensor Blue", Light.blue());
+        telemetry.addData("Color Sensor Alpha", Light.alpha());
         telemetry.addData("Power", OtherMotor.getPower());
         telemetry.addData("Distance", OD.getLightDetected());
         telemetry.addData("Distance Raw", OD.getLightDetectedRaw());
