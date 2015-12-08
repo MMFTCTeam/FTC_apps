@@ -31,8 +31,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegister;
+
+import junit.framework.Test;
 
 /**
  * Register Op Modes
@@ -46,7 +49,6 @@ public class FtcOpModeRegister implements OpModeRegister {
      * @param manager op mode manager
      */
     public void register(OpModeManager manager) {
-
     /*
      * register your op modes here.
      * The first parameter is the name of the op mode
@@ -64,6 +66,9 @@ public class FtcOpModeRegister implements OpModeRegister {
         manager.register("PushBotManual", PushBotManual.class);
         manager.register("Encoders", EncoderTest.class);
         manager.register("TELEopus", TeleOpus.class);
+        manager.register("Parallel Processing for n00bs",TeleOpPARALLEL.class);
+        manager.register("Testing", TestMotors.class);
+
 
 
     /*

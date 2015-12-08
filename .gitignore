@@ -15,8 +15,12 @@ local.properties
 # Windows thumbnail db
 Thumbs.db
 
+/V1_1_2_Patch_to_run_colour_sensor_.patch
+/FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/TeleOpPARALLEL.java
 # OSX files
 /Encoder_Test_Patch_1_0.patch
+/V1_0_2_Patch_cannot_operate__OtherMotor_.patch
+/FtcRobotController/src/main/java/com/qualcomm/ftcrobotcontroller/opmodes/FtcOpModeRegister.java
 .DS_Store
 
 # Android Studio
