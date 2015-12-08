@@ -22,7 +22,7 @@ public class EncoderTest extends OpMode {
     public Servo Lbump;
     public Servo Rbump;
     boolean reset;
-    // DcMotorController dc = OtherMotor.getController();
+    // DcMotorController dc = ExtensionMotor.getController();
 
     @Override
     public void init() {
