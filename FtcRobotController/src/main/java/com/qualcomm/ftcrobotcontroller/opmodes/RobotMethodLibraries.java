@@ -13,6 +13,9 @@ import com.qualcomm.robotcore.hardware.configuration.LegacyModuleControllerConfi
  * @deprecated
  * @since 1.2
  * don't use this in a program but feel free to copy code
+ * @see com.qualcomm.ftcrobotcontroller.opmodes.Fury_Bot
+ * and
+ * @see com.qualcomm.ftcrobotcontroller.opmodes.Programbot
  */
 public class RobotMethodLibraries extends OpMode {
     public DcMotorController Dcm2;
@@ -58,22 +61,22 @@ public class RobotMethodLibraries extends OpMode {
         Lbump = hardwareMap.servo.get("L");
         Rbump = hardwareMap.servo.get("R");
         // sr = hardwareMap.servoController.get("Servo Controller 1");
-        // sr = Lbump.getController();
+        // sr = TiltBoxL.getController();
         OtherMotor = hardwareMap.dcMotor.get("Attach");
         // Dcm = hardwareMap.dcMotorController.get("Motor Controller 1");
         // Dcm2 = hardwareMap.dcMotorController.get("Motor Controller 3");
         // Dcm3 = hardwareMap.dcMotorController.get("Motor Controller 2");
         // Dcm = FL.getController();
         // Dcm3 = FR.getController();
-        // Dcm2 = OtherMotor.getController();
+        // Dcm2 = ExtensionMotor.getController();
         /*if (Dcm != FL.getController())
             Dcm = FL.getController();
-        if (Dcm2 != OtherMotor.getController())
-            Dcm2 = OtherMotor.getController();
+        if (Dcm2 != ExtensionMotor.getController())
+            Dcm2 = ExtensionMotor.getController();
         if (Dcm3 != FR.getController())
             Dcm3 = FR.getController();
-        if (sr != Lbump.getController())
-            sr = Lbump.getController();*/
+        if (sr != TiltBoxL.getController())
+            sr = TiltBoxL.getController();*/
     }
     /**
      * if you don't want to use the defaults, define and use a preset
@@ -89,24 +92,25 @@ public class RobotMethodLibraries extends OpMode {
             Lbump = hardwareMap.servo.get("L");
             Rbump = hardwareMap.servo.get("R");
             // sr = hardwareMap.servoController.get("Servo Controller 1");
-            // sr = Lbump.getController();
+            // sr = TiltBoxL.getController();
             OtherMotor = hardwareMap.dcMotor.get("Attach");
             // Dcm = hardwareMap.dcMotorController.get("Motor Controller 1");
             // Dcm2 = hardwareMap.dcMotorController.get("Motor Controller 3");
             // Dcm3 = hardwareMap.dcMotorController.get("Motor Controller 2");
             // Dcm = FL.getController();
             // Dcm3 = FR.getController();
-            // Dcm2 = OtherMotor.getController();
+            // Dcm2 = ExtensionMotor.getController();
         /* if (Dcm != FL.getController())
             Dcm = FL.getController();
-        if (Dcm2 != OtherMotor.getController())
-            Dcm2 = OtherMotor.getController();
+        if (Dcm2 != ExtensionMotor.getController())
+            Dcm2 = ExtensionMotor.getController();
         if (Dcm3 != FR.getController())
             Dcm3 = FR.getController();
-        if (sr != Lbump.getController())
-            sr = Lbump.getController();*/
+        if (sr != TiltBoxL.getController())
+            sr = TiltBoxL.getController();*/
         }
         if (p == Preset.Nothing) {
+            return;
             // nothing here!
         }
         if (p == Preset.Tom) {
