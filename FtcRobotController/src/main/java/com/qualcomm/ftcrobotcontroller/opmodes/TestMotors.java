@@ -48,7 +48,7 @@ public class TestMotors extends OpMode {
             s1.setPosition(0.5);
             s2.setPosition(0.5);
         }
-        if (gamepad1.back){
+        if (gamepad1.back) {
             dc1.setPower(0);
             dc2.setPower(0);
             dc3.setPower(0);
