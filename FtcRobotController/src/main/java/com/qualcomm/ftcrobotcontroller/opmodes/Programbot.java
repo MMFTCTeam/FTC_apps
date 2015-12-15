@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 /**
  * Created by sam on 07-Dec-15.
+ * This is the class for All methods defined by ProgramBot
  */
 public abstract class Programbot extends OpMode {
     public static final int LEFT_MOTORS_STOP = 0x01;
@@ -30,7 +31,7 @@ public abstract class Programbot extends OpMode {
 
     @Override
     /**
-     * @
+     *
      */
     public void init() {
         BL = hardwareMap.dcMotor.get("m1");
