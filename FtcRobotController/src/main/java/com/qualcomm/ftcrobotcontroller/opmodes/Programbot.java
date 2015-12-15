@@ -1,7 +1,5 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
-import android.graphics.Path;
-
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -13,6 +11,9 @@ import com.qualcomm.robotcore.hardware.Servo;
  * Created by sam on 07-Dec-15.
  */
 public abstract class Programbot extends OpMode {
+    public static final int LEFT_MOTORS_STOP = 0x01;
+    public static final int RIGHT_MOTORS_STOP = 0x02;
+    public static final int ALL_MOTORS_STOP = 0x03;
     public DcMotor FL;
     public DcMotor FR;
     public DcMotor OtherMotor;
@@ -26,10 +27,11 @@ public abstract class Programbot extends OpMode {
     public double Lthrottle = gamepad1.left_stick_y;
     public double Rthrottle = gamepad1.right_stick_y;
     boolean enabled = false;
+
     @Override
     /**
-    *
-    */
+     * @
+     */
     public void init() {
         BL = hardwareMap.dcMotor.get("m1");
         FL = hardwareMap.dcMotor.get("m2");
@@ -51,32 +53,59 @@ public abstract class Programbot extends OpMode {
         OtherMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         OtherMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
     }
+
     void Move() {
         BL.setPower(1);
         FL.setPower(1);
         FR.setPower(1);
         BR.setPower(1);
     }
+
     void Move(double power) {
         BL.setPower(power);
         FL.setPower(power);
         FR.setPower(power);
         BR.setPower(power);
     }
+
+    public void Move(double power, int distance) {
+        while (BL.getCurrentPosition() < distance) {
+            BL.setPower(power);
+            FL.setPower(power);
+            FR.setPower(power);
+            BR.setPower(power);
+        }
+    }
+
     void turnLeft() {
         BL.setPower(-1);
         FL.setPower(-1);
         FR.setPower(1);
         BR.setPower(1);
     }
+
     void turnLeftRadians(float rad) {
         BL.setPower(-1);
         FL.setPower(-1);
         FR.setPower(1);
         BR.setPower(1);
     }
+
     void turnRightRadians(float rad) {
         BL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        BL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        while (BL.getCurrentPosition() < rad) {
+            BL.setPower(1);
+            FL.setPower(1);
+            FR.setPower(-1);
+            BR.setPower(-1);
+        }
+        haltMotors();
+    }
+    void turnRightRadians(float rad, boolean reset) {
+        if (reset) {
+            BL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        }
         BL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         while (BL.getCurrentPosition() < rad) {
             BL.setPower(1);
@@ -91,5 +120,26 @@ public abstract class Programbot extends OpMode {
         FL.setPower(0);
         BR.setPower(0);
         FR.setPower(0);
+    }
+
+    int getHaltMotorStatus() {
+        boolean lstop = false;
+        boolean rstop = false;
+        if (BL.getPower() == 0 & FL.getPower() == 0) {
+            lstop = true;
+        }
+        if (FR.getPower() == 0 & BR.getPower() == 0) {
+            rstop = true;
+        }
+        if (lstop) {
+            return LEFT_MOTORS_STOP;
+        }
+        if (rstop) {
+            return RIGHT_MOTORS_STOP;
+        }
+        if (lstop & rstop) {
+            return ALL_MOTORS_STOP;
+        }
+        return 0;
     }
 }
