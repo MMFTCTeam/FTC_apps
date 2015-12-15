@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 /**
  * Created by sam on 07-Dec-15.
+ * This has all methods defined by Fury Bot
  */
 public abstract class Fury_Bot extends OpMode {
     public static final double PI = 3.1415926535897932384626433832795d;
@@ -68,6 +69,15 @@ public abstract class Fury_Bot extends OpMode {
         BR.setPower(power);
     }
 
+    public void Move(double power, int distance) {
+        while (BL.getCurrentPosition() < distance) {
+            BL.setPower(power);
+            FL.setPower(power);
+            FR.setPower(power);
+            BR.setPower(power);
+        }
+    }
+
     void turnLeft() {
         BL.setPower(-1);
         FL.setPower(-1);
@@ -85,7 +95,20 @@ public abstract class Fury_Bot extends OpMode {
     void turnRightRadians(float rad) {
         BL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         BL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        while (BL.getCurrentPosition() < rad / 3 * (2 * PI)) {
+        while (BL.getCurrentPosition() < rad) {
+            BL.setPower(1);
+            FL.setPower(1);
+            FR.setPower(-1);
+            BR.setPower(-1);
+        }
+        haltMotors();
+    }
+    void turnRightRadians(float rad, boolean reset) {
+        if (reset) {
+            BL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        }
+        BL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        while (BL.getCurrentPosition() < rad) {
             BL.setPower(1);
             FL.setPower(1);
             FR.setPower(-1);
@@ -102,11 +125,21 @@ public abstract class Fury_Bot extends OpMode {
     }
 
     int getHaltMotorStatus() {
+        boolean lstop = false;
+        boolean rstop = false;
         if (BL.getPower() == 0 & FL.getPower() == 0) {
+            lstop = true;
+        }
+        if (FR.getPower() == 0 & BR.getPower() == 0) {
+            rstop = true;
+        }
+        if (lstop) {
             return LEFT_MOTORS_STOP;
-        } else if (FR.getPower() == 0 & BR.getPower() == 0) {
+        }
+        if (rstop) {
             return RIGHT_MOTORS_STOP;
-        } else if ((FR.getPower() == 0 && BR.getPower() == 0) && (BL.getPower() == 0 && FL.getPower() == 0)) {
+        }
+        if (lstop & rstop) {
             return ALL_MOTORS_STOP;
         }
         return 0;
