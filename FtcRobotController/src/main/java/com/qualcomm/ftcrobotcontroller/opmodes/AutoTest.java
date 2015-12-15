@@ -2,6 +2,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 
 /**
  * Created by sam on 07-Dec-15.
+ * Sample Autonomous Programme
  */
 public class AutoTest extends Fury_Bot {
     enum Runstate {
@@ -15,12 +16,13 @@ public class AutoTest extends Fury_Bot {
     @Override
     public void init() {
         super.init();
+        d = Runstate.FindBlocks;
     }
 
     @Override
     public void loop() {
         while (d == Runstate.FindBlocks) {
-            getRuntime();
+
         }
     }
 
