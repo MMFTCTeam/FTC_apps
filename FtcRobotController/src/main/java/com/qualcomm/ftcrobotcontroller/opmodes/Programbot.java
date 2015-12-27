@@ -34,14 +34,14 @@ public abstract class Programbot extends OpMode {
      *
      */
     public void init() {
-        BL = hardwareMap.dcMotor.get("m1");
-        FL = hardwareMap.dcMotor.get("m2");
-        BR = hardwareMap.dcMotor.get("m3");
-        FR = hardwareMap.dcMotor.get("m4");
-        OtherMotor = hardwareMap.dcMotor.get("m5");
+        BL = hardwareMap.dcMotor.get("Bl");
+        FL = hardwareMap.dcMotor.get("Fl");
+        BR = hardwareMap.dcMotor.get("Br");
+        FR = hardwareMap.dcMotor.get("Fr");
+        OtherMotor = hardwareMap.dcMotor.get("a1");
         Rbump = hardwareMap.servo.get("s1");
         Lbump = hardwareMap.servo.get("s2");
-        OD = hardwareMap.opticalDistanceSensor.get("a0");
+        OD = hardwareMap.opticalDistanceSensor.get("od");
         Light = hardwareMap.colorSensor.get("Color");
         BL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         BL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
@@ -55,14 +55,14 @@ public abstract class Programbot extends OpMode {
         OtherMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
     }
 
-    void Move() {
+    public void Move() {
         BL.setPower(1);
         FL.setPower(1);
         FR.setPower(1);
         BR.setPower(1);
     }
 
-    void Move(double power) {
+    public void Move(double power) {
         BL.setPower(power);
         FL.setPower(power);
         FR.setPower(power);
@@ -76,23 +76,34 @@ public abstract class Programbot extends OpMode {
             FR.setPower(power);
             BR.setPower(power);
         }
+        haltMotors();
     }
-
-    void turnLeft() {
+    public void Move(double power, int distance, boolean halt) {
+        while (BL.getCurrentPosition() < distance) {
+            BL.setPower(power);
+            FL.setPower(power);
+            FR.setPower(power);
+            BR.setPower(power);
+        }
+        if(halt) {
+            haltMotors();
+        }
+    }
+    public void turnLeft() {
         BL.setPower(-1);
         FL.setPower(-1);
         FR.setPower(1);
         BR.setPower(1);
     }
 
-    void turnLeftRadians(float rad) {
+    public void turnLeftRadians(float rad) {
         BL.setPower(-1);
         FL.setPower(-1);
         FR.setPower(1);
         BR.setPower(1);
     }
 
-    void turnRightRadians(float rad) {
+    public void turnRightRadians(float rad) {
         BL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         BL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         while (BL.getCurrentPosition() < rad) {
@@ -103,7 +114,7 @@ public abstract class Programbot extends OpMode {
         }
         haltMotors();
     }
-    void turnRightRadians(float rad, boolean reset) {
+    public void turnRightRadians(float rad, boolean reset) {
         if (reset) {
             BL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         }
@@ -116,14 +127,14 @@ public abstract class Programbot extends OpMode {
         }
         haltMotors();
     }
-    void haltMotors() {
+    public void haltMotors() {
         BL.setPower(0);
         FL.setPower(0);
         BR.setPower(0);
         FR.setPower(0);
     }
 
-    int getHaltMotorStatus() {
+    public int getHaltMotorStatus() {
         boolean lstop = false;
         boolean rstop = false;
         if (BL.getPower() == 0 & FL.getPower() == 0) {
@@ -143,7 +154,7 @@ public abstract class Programbot extends OpMode {
         }
         return 0;
     }
-    void ResetEncoders() {
+    public void ResetEncoders() {
         FL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         BL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         BR.setMode(DcMotorController.RunMode.RESET_ENCODERS);
