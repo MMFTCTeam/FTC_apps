@@ -45,7 +45,7 @@ public class TeleOpus extends OpMode {
         OtherMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         BL.setDirection(DcMotor.Direction.REVERSE);
         FR.setDirection(DcMotor.Direction.REVERSE);
-        gamepad1.setJoystickDeadzone(0.02f);
+        gamepad1.setJoystickDeadzone(0.005f);
         Rbump.setPosition(1);
         Lbump.setPosition(0);
     }
@@ -94,6 +94,12 @@ public class TeleOpus extends OpMode {
         }
         if (gamepad1.x) {
             Light.enableLed(false);
+        }
+        if (gamepad1.left_stick_button) {
+            BL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+            // BL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+            BR.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+            // BR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         }
         telemetry.addData("Color Sensor Red", Light.red());
         telemetry.addData("Color Sensor Green", Light.green());
