@@ -43,16 +43,16 @@ public abstract class Programbot extends OpMode {
         Lbump = hardwareMap.servo.get("s2");
         OD = hardwareMap.opticalDistanceSensor.get("od");
         Light = hardwareMap.colorSensor.get("Color");
-        BL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         BL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        FL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        BL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         FL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        BR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        FL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         BR.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        FR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        BR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         FR.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        OtherMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        FR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         OtherMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        OtherMotor.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
     }
 
     public void Move() {
