@@ -21,6 +21,7 @@ public class TeleOpus extends OpMode {
     public Servo Rbump;
     public OpticalDistanceSensor OD;
     public ColorSensor Light;
+    private boolean reversed = false;
 
     @Override
     public void init() {
@@ -63,13 +64,22 @@ public class TeleOpus extends OpMode {
         BL.setPower(Lthrottle);
         FR.setPower(Rthrottle);
         BR.setPower(Rthrottle); */
-        FL.setPower(gamepad1.left_stick_y);
-        BL.setPower(gamepad1.left_stick_y);
-        FR.setPower(gamepad1.right_stick_y);
-        BR.setPower(gamepad1.right_stick_y);
+        if (!reversed) {
+            FL.setPower(gamepad1.left_stick_y);
+            BL.setPower(gamepad1.left_stick_y);
+            FR.setPower(gamepad1.right_stick_y);
+            BR.setPower(gamepad1.right_stick_y);
+        }
+        else {
+            FL.setPower(gamepad1.right_stick_y);
+            BL.setPower(gamepad1.right_stick_y);
+            FR.setPower(gamepad1.left_stick_y);
+            BR.setPower(gamepad1.left_stick_y);
+        }
         if (gamepad1.back) {
             OD.enableLed(true);
-        } else if (gamepad1.dpad_left) {
+        }
+        if (gamepad1.dpad_left) {
             OD.enableLed(false);
         }
         if (gamepad1.a) {
@@ -101,6 +111,35 @@ public class TeleOpus extends OpMode {
             BR.setMode(DcMotorController.RunMode.RESET_ENCODERS);
             // BR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         }
+        if (gamepad1.guide) {
+            do {
+                if (!reversed) {
+                    reversed = true;
+                } else {
+                    reversed = false;
+                }
+                if (FL.getDirection() == DcMotor.Direction.FORWARD) {
+                    FL.setDirection(DcMotor.Direction.REVERSE);
+                } else {
+                    FL.setDirection(DcMotor.Direction.FORWARD);
+                }
+                if (BL.getDirection() == DcMotor.Direction.FORWARD) {
+                    BL.setDirection(DcMotor.Direction.REVERSE);
+                } else {
+                    BL.setDirection(DcMotor.Direction.FORWARD);
+                }
+                if (FR.getDirection() == DcMotor.Direction.FORWARD) {
+                    FR.setDirection(DcMotor.Direction.REVERSE);
+                } else {
+                    FR.setDirection(DcMotor.Direction.FORWARD);
+                }
+                if (BR.getDirection() == DcMotor.Direction.FORWARD) {
+                    BR.setDirection(DcMotor.Direction.REVERSE);
+                } else {
+                    BR.setDirection(DcMotor.Direction.FORWARD);
+                }
+            } while(gamepad1.guide);
+        }
         telemetry.addData("Color Sensor Red", Light.red());
         telemetry.addData("Color Sensor Green", Light.green());
         telemetry.addData("Color Sensor Blue", Light.blue());
@@ -108,5 +147,6 @@ public class TeleOpus extends OpMode {
         telemetry.addData("Distance", OD.getLightDetected());
         telemetry.addData("Distance Raw", OD.getLightDetectedRaw());
         telemetry.addData("Encoders", BL.getCurrentPosition() + "\n" + BR.getCurrentPosition());
+        telemetry.addData("Reversed?", reversed);
     }
 }
