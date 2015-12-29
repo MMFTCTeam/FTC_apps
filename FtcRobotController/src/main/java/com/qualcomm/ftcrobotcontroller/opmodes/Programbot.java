@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.robocol.Telemetry;
 
 /**
  * Created by sam on 07-Dec-15.
@@ -25,6 +26,7 @@ public abstract class Programbot extends OpMode {
     public Servo Rbump;
     public OpticalDistanceSensor OD;
     public ColorSensor Light;
+    public ColorSensor Line;
     public double Lthrottle = gamepad1.left_stick_y;
     public double Rthrottle = gamepad1.right_stick_y;
     boolean enabled = false;
@@ -43,16 +45,27 @@ public abstract class Programbot extends OpMode {
         Lbump = hardwareMap.servo.get("s2");
         OD = hardwareMap.opticalDistanceSensor.get("od");
         Light = hardwareMap.colorSensor.get("Color");
+        Line = hardwareMap.colorSensor.get("Lf");
         BL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         BL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        FL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        FL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         BR.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         BR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        FL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        FL.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
         FR.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        FR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        FR.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
         OtherMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         OtherMotor.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        //Debug
+        if (BL.getCurrentPosition() == 0 && BR.getCurrentPosition() == 0) {
+            System.out.println("Reset Encoders successfully");
+            telemetry.addData("ENCODERS STATUS", "Reset");
+
+        }
+        // End Debug
+
+        FL.setDirection(DcMotor.Direction.REVERSE);
+        BR.setDirection(DcMotor.Direction.REVERSE);
     }
 
     public void Move() {
@@ -78,6 +91,7 @@ public abstract class Programbot extends OpMode {
         }
         haltMotors();
     }
+
     public void Move(double power, int distance, boolean halt) {
         while (BL.getCurrentPosition() < distance) {
             BL.setPower(power);
@@ -85,10 +99,11 @@ public abstract class Programbot extends OpMode {
             FR.setPower(power);
             BR.setPower(power);
         }
-        if(halt) {
+        if (halt) {
             haltMotors();
         }
     }
+
     public void turnLeft() {
         BL.setPower(-1);
         FL.setPower(-1);
@@ -114,6 +129,7 @@ public abstract class Programbot extends OpMode {
         }
         haltMotors();
     }
+
     public void turnRightRadians(float rad, boolean reset) {
         if (reset) {
             BL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
@@ -127,6 +143,7 @@ public abstract class Programbot extends OpMode {
         }
         haltMotors();
     }
+
     public void haltMotors() {
         BL.setPower(0);
         FL.setPower(0);
@@ -154,6 +171,7 @@ public abstract class Programbot extends OpMode {
         }
         return 0;
     }
+
     public void ResetEncoders() {
         FL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         BL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
