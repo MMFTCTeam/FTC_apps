@@ -1,10 +1,12 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
+import com.qualcomm.robotcore.robocol.Telemetry;
+
 /**
  * Created by sam on 07-Dec-15.
  * Sample Autonomous Programme
  */
-public class AutoTest extends Fury_Bot {
+public class AutoTest extends Programbot {
     enum Runstate {
         FindBlocks,
         ClimbBar,
@@ -22,42 +24,56 @@ public class AutoTest extends Fury_Bot {
     @Override
     public void loop() {
         while (d == Runstate.FindBlocks) {
-
+            OD.enableLed(true);
+            Move(1, 200);
+            haltMotors();
+            telemetry.addData("OD", OD.getLightDetected());
+            try {
+                Thread.sleep(2000);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if(OD.getLightDetected() < 26) {
+                d = Runstate.FindLight;
+            }
         }
+        telemetry.addData("End of program","AYY LMAO!");
     }
-
     @Override
-    void haltMotors() {
+    public void haltMotors() {
         super.haltMotors();
     }
 
     @Override
-    void turnLeft() {
+    public void turnLeft() {
         super.turnLeft();
     }
 
     @Override
-    void turnRightRadians(float rad) {
+    public void turnRightRadians(float rad) {
         super.turnRightRadians(rad);
     }
 
     @Override
-    void Move() {
+    public void Move() {
         super.Move();
     }
 
     @Override
-    void Move(double power) {
+    public void Move(double power) {
         super.Move(power);
     }
 
     @Override
-    void turnLeftRadians(float rad) {
+    public void turnLeftRadians(float rad) {
         super.turnLeftRadians(rad);
     }
 
     @Override
-    int getHaltMotorStatus() {
+    public int getHaltMotorStatus() {
         return super.getHaltMotorStatus();
     }
+
+    @Override
+    public void ResetEncoders() { super.ResetEncoders(); }
 }
