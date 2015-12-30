@@ -1,5 +1,6 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -12,7 +13,7 @@ import com.qualcomm.robotcore.robocol.Telemetry;
  * Created by sam on 07-Dec-15.
  * This is the class for All methods defined by ProgramBot
  */
-public abstract class Programbot extends OpMode {
+public abstract class Programbot extends LinearOpMode {
     public static final int LEFT_MOTORS_STOP = 0x01;
     public static final int RIGHT_MOTORS_STOP = 0x02;
     public static final int ALL_MOTORS_STOP = 0x03;
@@ -31,11 +32,10 @@ public abstract class Programbot extends OpMode {
     public double Rthrottle = gamepad1.right_stick_y;
     boolean enabled = false;
 
-    @Override
     /**
      *
      */
-    public void init() {
+    public void initializeRobot() {
         BL = hardwareMap.dcMotor.get("Bl");
         FL = hardwareMap.dcMotor.get("Fl");
         BR = hardwareMap.dcMotor.get("Br");

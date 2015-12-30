@@ -56,6 +56,7 @@ public class TeleOpusLinear extends LinearOpMode {
         initializeRobot();
 
         waitForStart();
+        waitOneFullHardwareCycle();
 
         while (opModeIsActive()) {
             BL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
