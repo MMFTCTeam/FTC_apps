@@ -1,5 +1,6 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
+import com.qualcomm.ftccommon.DbgLog;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -20,7 +21,7 @@ public class TeleOpus extends OpMode {
     public Servo Lbump;
     public Servo Rbump;
     public OpticalDistanceSensor OD;
-    public ColorSensor Light;
+    public ColorSensor Light, Line;
     private boolean reversed = false;
 
     @Override
@@ -34,6 +35,7 @@ public class TeleOpus extends OpMode {
         Lbump = hardwareMap.servo.get("s2");
         OD = hardwareMap.opticalDistanceSensor.get("od");
         Light = hardwareMap.colorSensor.get("Color");
+        Line = hardwareMap.colorSensor.get("Lf");
         BL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         BL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         FL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
@@ -47,8 +49,14 @@ public class TeleOpus extends OpMode {
         BL.setDirection(DcMotor.Direction.REVERSE);
         FR.setDirection(DcMotor.Direction.REVERSE);
         gamepad1.setJoystickDeadzone(0.01f);
+        Light.enableLed(true);
+        Line.enableLed(true);
         Rbump.setPosition(1);
         Lbump.setPosition(0);
+
+        /*if (Light.getI2cAddress() == Line.getI2cAddress()) {
+            Line.setI2cAddress(0x3c);
+        }*/
     }
 
     @Override
@@ -101,9 +109,11 @@ public class TeleOpus extends OpMode {
         }
         if (gamepad1.y) {
             Light.enableLed(true);
+            Line.enableLed(true);
         }
         if (gamepad1.x) {
             Light.enableLed(false);
+            Line.enableLed(false);
         }
         if (gamepad1.left_stick_button) {
             BL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
@@ -143,6 +153,9 @@ public class TeleOpus extends OpMode {
         telemetry.addData("Color Sensor Red", Light.red());
         telemetry.addData("Color Sensor Green", Light.green());
         telemetry.addData("Color Sensor Blue", Light.blue());
+        telemetry.addData("Line Follower Red", Line.red());
+        telemetry.addData("Line Follower Green", Line.green());
+        telemetry.addData("Line Follower Blue", Line.blue());
         telemetry.addData("Power", OtherMotor.getPower());
         telemetry.addData("Distance", OD.getLightDetected());
         telemetry.addData("Distance Raw", OD.getLightDetectedRaw());
