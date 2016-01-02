@@ -68,6 +68,13 @@ public class FtcOpModeRegister implements OpModeRegister {
         manager.register("TELEopus", TeleOpus.class);
         manager.register("Parallel Processing for n00bs",TeleOpPARALLEL.class);
         manager.register("Testing", TestMotors.class);
+        manager.register("Auton", BeaconAuton_v1.class);
+        manager.register("Auton2", BeaconAuton_v2.class);
+        manager.register("LineFollow1", LineFollow_v1.class);
+        manager.register("LineFollow2", LineFollow_v2.class);
+        manager.register("I2C Change", LinearI2cAddressChange.class);
+        manager.register("I2C Change2", LinearI2cAddressChange2.class);
+
 
 
 
