@@ -9,7 +9,10 @@ import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 /**
- * Created by kevinobabb on 12/27/15.
+ * Created by Trevor on 12/27/15.
+ * This finds the color of the beacon in autonomous
+ * The program reports the color seen
+ * Change code
  */
 public class BeaconAuton_v2 extends OpMode {
 
