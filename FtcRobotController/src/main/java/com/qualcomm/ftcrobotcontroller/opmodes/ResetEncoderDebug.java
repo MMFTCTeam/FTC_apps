@@ -31,7 +31,6 @@ public class ResetEncoderDebug extends LinearOpMode {
             telemetry.addData("BR Reset", "Press B to reset");
             if (gamepad1.a) {
                 BL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-                BL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
                 telemetry.addData("BL Reset", "Resetting");
                 waitOneFullHardwareCycle();
                 if (BL.getCurrentPosition() == 0) {
@@ -43,9 +42,8 @@ public class ResetEncoderDebug extends LinearOpMode {
                 }
             }
             if (gamepad1.b) {
-                BR.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-                BR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
                 telemetry.addData("BR Reset", "Resetting");
+                BR.setMode(DcMotorController.RunMode.RESET_ENCODERS);
                 waitOneFullHardwareCycle();
                 if (BR.getCurrentPosition() == 0) {
                     telemetry.addData("BR Reset", "Reset Successful");
