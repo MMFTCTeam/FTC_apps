@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 /**
+ * @deprecated
  * Created by sam on 14-Nov-15.
  */
 public class TeleOpus extends OpMode {
