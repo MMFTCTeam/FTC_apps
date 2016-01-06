@@ -1,7 +1,5 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 
 /**
@@ -17,13 +15,14 @@ public class AutonomousClimbRed extends Programbot {
     public void runOpMode() throws InterruptedException {
         initializeRobot();
         waitForStart();
-        while(opModeIsActive()) {
+        while (opModeIsActive()) {
             while (BL.getCurrentPosition() < 1024) {
                 BL.setPower(1);
                 BR.setPower(1);
                 FL.setPower(1);
                 FR.setPower(1);
             }
+            final int TURNTARGET = 2048;
             BL.setPower(0);
             BR.setPower(0);
             FL.setPower(0);
@@ -31,28 +30,35 @@ public class AutonomousClimbRed extends Programbot {
             BR.setMode(DcMotorController.RunMode.RESET_ENCODERS);
             BL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
             waitOneFullHardwareCycle();
-        /*BL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        BR.setMode(DcMotorController.RunMode.RESET_ENCODERS);*/
             BL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
             BR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
             waitOneFullHardwareCycle();
-            while (BR.getCurrentPosition() < 2048) {
-                BL.setPower(-1);
-                FL.setPower(-1);
-                BR.setPower(1);
-                FR.setPower(1);
+            /**
+             * Both encoders must have reached TURNTARGET
+             */
+            while (!(BR.getCurrentPosition() > TURNTARGET && BL.getCurrentPosition() < -TURNTARGET)) {
+                if (BL.getCurrentPosition() <= -TURNTARGET) {
+                    BL.setPower(0);
+                    FL.setPower(0);
+                } else {
+                    BL.setPower(-1);
+                    FL.setPower(-1);
+                }
+                if (BR.getCurrentPosition() >= TURNTARGET) {
+                    BR.setPower(0);
+                    FR.setPower(0);
+                } else {
+                    BR.setPower(1);
+                    FR.setPower(1);
+                }
             }
             BL.setPower(0);
             BR.setPower(0);
             FL.setPower(0);
             FR.setPower(0);
             haltMotors();
-            if (opModeIsActive()) {
-                telemetry.addData("Encoders", BL.getCurrentPosition() + "\n" + BR.getCurrentPosition());
-            } else {
-                haltMotors();
-            }
             waitOneFullHardwareCycle();
+            telemetry.addData("Encoder State", BL.getCurrentPosition() + "\n" + BR.getCurrentPosition());
             break;
         }
     }
