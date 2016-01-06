@@ -57,27 +57,22 @@ public class FtcOpModeRegister implements OpModeRegister {
      * If two or more op modes are registered with the same name, the app will display an error.
      */
 
-        manager.register("NullOp", NullOp.class);
+        //manager.register("NullOp", NullOp.class);
 
         //manager.register("MatrixK9TeleOp", MatrixK9TeleOp.class);
-        manager.register("K9TeleOp", K9TeleOp.class);
-        manager.register("K9Line", K9Line.class);
-        manager.register("PushBotAuto", PushBotAuto.class);
-        manager.register("PushBotManual", PushBotManual.class);
-        manager.register("Encoders", EncoderTest.class);
+        //manager.register("K9TeleOp", K9TeleOp.class);
+        //manager.register("K9Line", K9Line.class);
+        //manager.register("PushBotAuto", PushBotAuto.class);
+        //manager.register("PushBotManual", PushBotManual.class);
+        // manager.register("Encoders", EncoderTest.class);
         manager.register("TELEopus", TeleOpus.class);
-        manager.register("Parallel Processing for n00bs",TeleOpPARALLEL.class);
-        manager.register("Testing", TestMotors.class);
-        manager.register("Auton", BeaconAuton_v1.class);
-        manager.register("Auton2", BeaconAuton_v2.class);
-        manager.register("LineFollow1", LineFollow_v1.class);
-        manager.register("LineFollow2", LineFollow_v2.class);
-        manager.register("I2C Change", LinearI2cAddressChange.class);
-        manager.register("I2C Change2", LinearI2cAddressChange2.class);
-
-
-
-
+        manager.register("TELEopus Linear", TeleOpusLinear.class);
+        // manager.register("Parallel Processing for n00bs",TeleOpPARALLEL.class);
+        // manager.register("Testing", TestMotors.class);
+        manager.register("Line following", FollowTheLine.class);
+        manager.register("Autonomous Trevor", BeaconAuton_v1.class);
+        manager.register("It should work better", AutonWOInherit.class);
+        manager.register("Autonomous II", Autonomous2.class);
     /*
      * Uncomment any of the following lines if you want to register an op mode.
      */
