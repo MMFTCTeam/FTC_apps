@@ -70,7 +70,7 @@ public class TeleOpusLinear extends LinearOpMode {
         BL.setPower(Lthrottle);
         FR.setPower(Rthrottle);
         BR.setPower(Rthrottle); */
-
+            OtherMotor.setPower(gamepad2.right_stick_y);
             if (!reversed) {
                 FL.setPower(gamepad1.left_stick_y);
                 BL.setPower(gamepad1.left_stick_y);
