@@ -19,6 +19,6 @@ public class TeleOp extends OpMode {
         gamepad1.setJoystickDeadzone(0.02f);
     }
     public void loop (){
-        arm.setPower(gamepad1.right_stick_y);
+        arm.setPower(contractThrottle);
     }
 }
