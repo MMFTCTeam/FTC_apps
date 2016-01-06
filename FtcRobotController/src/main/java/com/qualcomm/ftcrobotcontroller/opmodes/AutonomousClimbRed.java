@@ -26,10 +26,12 @@ public class AutonomousClimbRed extends Programbot {
         BR.setPower(0);
         FL.setPower(0);
         FR.setPower(0);
-        BL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        BL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         BR.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        BR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        BL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        /*BL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        BR.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        BL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        BR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);*/
         while (BR.getCurrentPosition() < 2048) {
             BL.setPower(-1);
             FL.setPower(-1);
@@ -38,7 +40,10 @@ public class AutonomousClimbRed extends Programbot {
         }
         haltMotors();
         if(opModeIsActive()) {
-            telemetry.addData("Encoder", BL.getCurrentPosition() + "\n" + BR.getCurrentPosition());
+            telemetry.addData("Encoders", BL.getCurrentPosition() + "\n" + BR.getCurrentPosition());
+        }else {
+            haltMotors();
         }
+        waitOneFullHardwareCycle();
     }
 }
