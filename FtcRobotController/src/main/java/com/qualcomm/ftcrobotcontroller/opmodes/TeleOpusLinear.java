@@ -8,7 +8,22 @@ import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 /**
- * Created by sam on 30-Dec-15.
+ * <h1>
+ * Created by sam on 30-Dec-15. <br><br>
+ *     Updated on
+ * TeleOpus Program V1.6.4 </h1>
+ * <p>
+ * Key Mapping for Robot: <br><br>
+ * Analog Joysticks: Move Robot <br>
+ * DPad Up: Start top Motor Forward <br>
+ * DPad Down: Start top Motor Backward <br>
+ * L Joystick button: Zero Encoders <br>
+ * L Bumper: extend servos <br>
+ * R Bumper: retract servos <br>
+ * Y Button: Light on <br>
+ * X Button: Light off <br>
+ * Home Button: Switch direction <br>
+ * </p>
  */
 public class TeleOpusLinear extends LinearOpMode {
     public DcMotor FL;
@@ -54,10 +69,8 @@ public class TeleOpusLinear extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         initializeRobot();
-
         waitForStart();
         waitOneFullHardwareCycle();
-
         while (opModeIsActive()) {
             BL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
             FL.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
@@ -97,8 +110,8 @@ public class TeleOpusLinear extends LinearOpMode {
                 OtherMotor.setPower(-1);
             }
             if (gamepad1.left_bumper) {
-                Rbump.setPosition(0);
-                Lbump.setPosition(1);
+                Rbump.setPosition(0.5);
+                Lbump.setPosition(0.5);
             }
             if (gamepad1.right_bumper) {
                 Lbump.setPosition(0);
@@ -119,11 +132,7 @@ public class TeleOpusLinear extends LinearOpMode {
                 // BR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
             }
             if (gamepad1.guide) {
-                if (!reversed) {
-                    reversed = true;
-                } else {
-                    reversed = false;
-                }
+                reversed = !reversed;
                 if (FL.getDirection() == DcMotor.Direction.FORWARD) {
                     FL.setDirection(DcMotor.Direction.REVERSE);
                 } else {
