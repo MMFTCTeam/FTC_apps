@@ -6,12 +6,13 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.Range;
 
 /**
  * <h1>
  * Created by sam on 30-Dec-15. <br><br>
  *     Updated on
- * TeleOpus Program V1.6.4 </h1>
+ * TeleOpus Program V1.7.1 </h1>
  * <p>
  * Key Mapping for Robot: <br><br>
  * Analog Joysticks: Move Robot <br>
@@ -66,6 +67,26 @@ public class TeleOpusLinear extends LinearOpMode {
         Rbump.setPosition(1);
         Lbump.setPosition(0);
     }
+
+    /**
+     * Scales input from the joystick
+     *
+     * @param value gamepad values
+     * @return
+     */
+    private double scaleInput(double value) {
+        double[] powerval = {0, 0.1, 0.2, 0.3, 0.5, 0.5, 0.5, 0.6, 0.8, 1.0};
+        double retVal;
+        int index;
+        if (value > 0) {
+            index = (int) Math.abs(Range.clip(value * 10, 0, 9));
+            retVal = powerval[index];
+        } else {
+            index = (int) Math.abs(Range.clip(value * -10, 0, 9));
+            retVal = -powerval[index];
+        }
+        return retVal;
+    }
     @Override
     public void runOpMode() throws InterruptedException {
         initializeRobot();
@@ -77,22 +98,24 @@ public class TeleOpusLinear extends LinearOpMode {
             BR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
             FR.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
             OtherMotor.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+            // unused -- Lthrottle controls Left Motors. Note! Flip these for reversed operation
             double Lthrottle = gamepad1.left_stick_y;
+            // unused -- Rthrottle controls Right Motors. Note! Flip these for reversed operation
             double Rthrottle = gamepad1.right_stick_y;
         /* FL.setPower(Lthrottle);
         BL.setPower(Lthrottle);
         FR.setPower(Rthrottle);
         BR.setPower(Rthrottle); */
             if (!reversed) {
-                FL.setPower(gamepad1.left_stick_y);
-                BL.setPower(gamepad1.left_stick_y);
-                FR.setPower(gamepad1.right_stick_y);
-                BR.setPower(gamepad1.right_stick_y);
+                FL.setPower(scaleInput(gamepad1.left_stick_y));
+                BL.setPower(scaleInput(gamepad1.left_stick_y));
+                FR.setPower(scaleInput(gamepad1.right_stick_y));
+                BR.setPower(scaleInput(gamepad1.right_stick_y));
             } else {
-                FL.setPower(gamepad1.right_stick_y);
-                BL.setPower(gamepad1.right_stick_y);
-                FR.setPower(gamepad1.left_stick_y);
-                BR.setPower(gamepad1.left_stick_y);
+                FL.setPower(scaleInput(gamepad1.right_stick_y));
+                BL.setPower(scaleInput(gamepad1.right_stick_y));
+                FR.setPower(scaleInput(gamepad1.left_stick_y));
+                BR.setPower(scaleInput(gamepad1.left_stick_y));
             }
             if (gamepad1.back) {
                 OD.enableLed(true);
@@ -125,12 +148,18 @@ public class TeleOpusLinear extends LinearOpMode {
                 Light.enableLed(false);
                 Line.enableLed(false);
             }
+            /**
+             *
+             */
             if (gamepad1.left_stick_button) {
                 BL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
                 // BL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
                 BR.setMode(DcMotorController.RunMode.RESET_ENCODERS);
                 // BR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
             }
+            /**
+             * Guide button events
+             */
             if (gamepad1.guide) {
                 reversed = !reversed;
                 if (FL.getDirection() == DcMotor.Direction.FORWARD) {
