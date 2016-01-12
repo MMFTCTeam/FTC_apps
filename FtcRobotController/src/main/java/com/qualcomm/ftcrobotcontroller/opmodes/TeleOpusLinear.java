@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.util.Range;
  * <h1>
  * Created by sam on 30-Dec-15. <br><br>
  *     Updated on
- * TeleOpus Program V1.7.2 </h1>
+ * TeleOpus Program V1.7.3 </h1>
  * <p>
  * Key Mapping for Robot: <br><br>
  * Analog Joysticks: Move Robot <br>
@@ -168,28 +168,31 @@ public class TeleOpusLinear extends LinearOpMode {
                 // BR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
             }
             if (gamepad1.guide) {
-                reversed = !reversed;
-                if (FL.getDirection() == DcMotor.Direction.FORWARD) {
-                    FL.setDirection(DcMotor.Direction.REVERSE);
-                } else {
-                    FL.setDirection(DcMotor.Direction.FORWARD);
+                telemetry.addData("Guide pressed?", gamepad1.guide);
+                while (gamepad1.guide) {
+                    reversed = !reversed;
+                    if (FL.getDirection() == DcMotor.Direction.FORWARD) {
+                        FL.setDirection(DcMotor.Direction.REVERSE);
+                    } else {
+                        FL.setDirection(DcMotor.Direction.FORWARD);
+                    }
+                    if (BL.getDirection() == DcMotor.Direction.FORWARD) {
+                        BL.setDirection(DcMotor.Direction.REVERSE);
+                    } else {
+                        BL.setDirection(DcMotor.Direction.FORWARD);
+                    }
+                    if (FR.getDirection() == DcMotor.Direction.FORWARD) {
+                        FR.setDirection(DcMotor.Direction.REVERSE);
+                    } else {
+                        FR.setDirection(DcMotor.Direction.FORWARD);
+                    }
+                    if (BR.getDirection() == DcMotor.Direction.FORWARD) {
+                        BR.setDirection(DcMotor.Direction.REVERSE);
+                    } else {
+                        BR.setDirection(DcMotor.Direction.FORWARD);
+                    }
+                    // sleep(20);
                 }
-                if (BL.getDirection() == DcMotor.Direction.FORWARD) {
-                    BL.setDirection(DcMotor.Direction.REVERSE);
-                } else {
-                    BL.setDirection(DcMotor.Direction.FORWARD);
-                }
-                if (FR.getDirection() == DcMotor.Direction.FORWARD) {
-                    FR.setDirection(DcMotor.Direction.REVERSE);
-                } else {
-                    FR.setDirection(DcMotor.Direction.FORWARD);
-                }
-                if (BR.getDirection() == DcMotor.Direction.FORWARD) {
-                    BR.setDirection(DcMotor.Direction.REVERSE);
-                } else {
-                    BR.setDirection(DcMotor.Direction.FORWARD);
-                }
-                sleep(20);
             }
             telemetry.addData("Color Sensor Red", Light.red());
             telemetry.addData("Color Sensor Green", Light.green());
@@ -202,6 +205,7 @@ public class TeleOpusLinear extends LinearOpMode {
             telemetry.addData("Distance Raw", OD.getLightDetectedRaw());
             telemetry.addData("Encoders", BL.getCurrentPosition() + "\n" + BR.getCurrentPosition());
             telemetry.addData("Reversed?", reversed);
+
             waitForNextHardwareCycle();
         }
     }
