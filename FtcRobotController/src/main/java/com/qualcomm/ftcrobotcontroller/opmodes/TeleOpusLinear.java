@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.util.Range;
  * <h1>
  * Created by sam on 30-Dec-15. <br><br>
  *     Updated on
- * TeleOpus Program V1.7.1 </h1>
+ * TeleOpus Program V1.7.2 </h1>
  * <p>
  * Key Mapping for Robot: <br><br>
  * Analog Joysticks: Move Robot <br>
@@ -38,6 +38,13 @@ public class TeleOpusLinear extends LinearOpMode {
     public OpticalDistanceSensor OD;
     public ColorSensor Light, Line;
     private boolean reversed = false;
+
+    /**
+     * <p>
+     * Corresponds to OpMode's init(); <br>
+     * Starting code
+     * </p>
+     */
     void initializeRobot() {
         BL = hardwareMap.dcMotor.get("Bl");
         FL = hardwareMap.dcMotor.get("Fl");
@@ -69,10 +76,10 @@ public class TeleOpusLinear extends LinearOpMode {
     }
 
     /**
-     * Scales input from the joystick
-     *
-     * @param value gamepad values
-     * @return
+     * Scales input from the joystick <br>
+     * Note! Joystick forward returns negative values.
+     * @param value raw gamepad values
+     * @return Scaled power values
      */
     private double scaleInput(double value) {
         double[] powerval = {0, 0.1, 0.2, 0.3, 0.5, 0.5, 0.5, 0.6, 0.8, 1.0};
@@ -87,6 +94,12 @@ public class TeleOpusLinear extends LinearOpMode {
         }
         return retVal;
     }
+
+    /**
+     * Robot Main Loop
+     *
+     * @throws InterruptedException
+     */
     @Override
     public void runOpMode() throws InterruptedException {
         initializeRobot();
@@ -98,10 +111,8 @@ public class TeleOpusLinear extends LinearOpMode {
             BR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
             FR.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
             OtherMotor.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-            // unused -- Lthrottle controls Left Motors. Note! Flip these for reversed operation
-            double Lthrottle = gamepad1.left_stick_y;
-            // unused -- Rthrottle controls Right Motors. Note! Flip these for reversed operation
-            double Rthrottle = gamepad1.right_stick_y;
+            // double Lthrottle = gamepad1.left_stick_y; unused -- Lthrottle controls Left Motors. Note! Flip these for reversed operation
+            // double Rthrottle = gamepad1.right_stick_y; unused -- Rthrottle controls Right Motors. Note! Flip these for reversed operation
         /* FL.setPower(Lthrottle);
         BL.setPower(Lthrottle);
         FR.setPower(Rthrottle);
@@ -117,12 +128,14 @@ public class TeleOpusLinear extends LinearOpMode {
                 FR.setPower(scaleInput(gamepad1.left_stick_y));
                 BR.setPower(scaleInput(gamepad1.left_stick_y));
             }
+            // #doesn't work. Will be removed in future release
             if (gamepad1.back) {
                 OD.enableLed(true);
             }
             if (gamepad1.dpad_left) {
                 OD.enableLed(false);
             }
+            // #end doesnt work
             if (gamepad1.a) {
                 OtherMotor.setPower(0);
             }
@@ -148,18 +161,12 @@ public class TeleOpusLinear extends LinearOpMode {
                 Light.enableLed(false);
                 Line.enableLed(false);
             }
-            /**
-             *
-             */
             if (gamepad1.left_stick_button) {
                 BL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
                 // BL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
                 BR.setMode(DcMotorController.RunMode.RESET_ENCODERS);
                 // BR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
             }
-            /**
-             * Guide button events
-             */
             if (gamepad1.guide) {
                 reversed = !reversed;
                 if (FL.getDirection() == DcMotor.Direction.FORWARD) {
