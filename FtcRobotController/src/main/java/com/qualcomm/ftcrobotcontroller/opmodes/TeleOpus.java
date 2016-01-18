@@ -1,6 +1,5 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
-import com.qualcomm.ftccommon.DbgLog;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -10,6 +9,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 /**
  * @deprecated
+ * Note, this will not be updated any more, Please use TeleOpusLinear
+ * V1.6.4
  * Created by sam on 14-Nov-15.
  */
 public class TeleOpus extends OpMode {
@@ -124,11 +125,7 @@ public class TeleOpus extends OpMode {
         }
         if (gamepad1.guide) {
             do {
-                if (!reversed) {
-                    reversed = true;
-                } else {
-                    reversed = false;
-                }
+                reversed = !reversed;
                 if (FL.getDirection() == DcMotor.Direction.FORWARD) {
                     FL.setDirection(DcMotor.Direction.REVERSE);
                 } else {
