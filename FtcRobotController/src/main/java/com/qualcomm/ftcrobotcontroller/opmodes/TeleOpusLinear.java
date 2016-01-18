@@ -12,9 +12,9 @@ import com.qualcomm.robotcore.util.Range;
  * <h1>
  * Created by sam on 30-Dec-15. <br><br>
  *     Updated on
- * TeleOpus Program V1.7.3 </h1>
+ * TeleOpus Program V1.7.4 </h1>
  * <p>
- * Key Mapping for Robot: <br><br>
+ * Key Mapping for Robot (Program Bot): <br><br>
  * Analog Joysticks: Move Robot <br>
  * DPad Up: Start top Motor Forward <br>
  * DPad Down: Start top Motor Backward <br>
@@ -82,22 +82,20 @@ public class TeleOpusLinear extends LinearOpMode {
      * @return Scaled power values
      */
     private double scaleInput(double value) {
-        double[] powerval = {0, 0.1, 0.2, 0.3, 0.5, 0.5, 0.5, 0.6, 0.8, 1.0};
+        double[] powerval = {0, 0.1, 0.2, 0.2, 0.5, 0.5, 0.5, 0.7, 0.7, 0.9, 1.0};
         double retVal;
         int index;
         if (value > 0) {
-            index = (int) Math.abs(Range.clip(value * 10, 0, 9));
+            index = (int) Math.abs(Range.clip(value * 10, 0, 10));
             retVal = powerval[index];
         } else {
-            index = (int) Math.abs(Range.clip(value * -10, 0, 9));
+            index = (int) Math.abs(Range.clip(value * -10, 0, 10));
             retVal = -powerval[index];
         }
         return retVal;
     }
-
     /**
      * Robot Main Loop
-     *
      * @throws InterruptedException
      */
     @Override
@@ -111,12 +109,6 @@ public class TeleOpusLinear extends LinearOpMode {
             BR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
             FR.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
             OtherMotor.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-            // double Lthrottle = gamepad1.left_stick_y; unused -- Lthrottle controls Left Motors. Note! Flip these for reversed operation
-            // double Rthrottle = gamepad1.right_stick_y; unused -- Rthrottle controls Right Motors. Note! Flip these for reversed operation
-        /* FL.setPower(Lthrottle);
-        BL.setPower(Lthrottle);
-        FR.setPower(Rthrottle);
-        BR.setPower(Rthrottle); */
             if (!reversed) {
                 FL.setPower(scaleInput(gamepad1.left_stick_y));
                 BL.setPower(scaleInput(gamepad1.left_stick_y));
@@ -128,14 +120,6 @@ public class TeleOpusLinear extends LinearOpMode {
                 FR.setPower(scaleInput(gamepad1.left_stick_y));
                 BR.setPower(scaleInput(gamepad1.left_stick_y));
             }
-            // #doesn't work. Will be removed in future release
-            if (gamepad1.back) {
-                OD.enableLed(true);
-            }
-            if (gamepad1.dpad_left) {
-                OD.enableLed(false);
-            }
-            // #end doesnt work
             if (gamepad1.a) {
                 OtherMotor.setPower(0);
             }
