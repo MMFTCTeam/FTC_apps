@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 /**
  * Created by sam on 07-Dec-15.
  * This has all methods defined by Fury Bot
+ * @deprecated
  */
 public abstract class Fury_Bot extends OpMode {
     public static final double PI = 3.1415926535897932384626433832795d;
@@ -22,37 +23,43 @@ public abstract class Fury_Bot extends OpMode {
     public DcMotor Roller;
     public DcMotor BL;
     public DcMotor BR;
+    public ColorSensor BeaconFinder;
+    public ColorSensor LeftFloor;
     // public ServoController sr;
     public Servo TiltBoxL;
     public Servo TiltBoxR;
     public OpticalDistanceSensor OD;
-    public ColorSensor Light;
+    public ColorSensor RightFloor;
     public double Lthrottle = gamepad1.left_stick_y;
     public double Rthrottle = gamepad1.right_stick_y;
     boolean enabled = false;
 
     @Override
     public void init() {
-        BL = hardwareMap.dcMotor.get("m1");
-        FL = hardwareMap.dcMotor.get("m2");
-        BR = hardwareMap.dcMotor.get("m3");
-        FR = hardwareMap.dcMotor.get("m4");
-        ExtensionMotor = hardwareMap.dcMotor.get("m5");
-        Roller = hardwareMap.dcMotor.get("m6");
+        BL = hardwareMap.dcMotor.get("Bl");
+        FL = hardwareMap.dcMotor.get("Fl");
+        BR = hardwareMap.dcMotor.get("Br");
+        FR = hardwareMap.dcMotor.get("Fr");
+        ExtensionMotor = hardwareMap.dcMotor.get("a1");
+        Roller = hardwareMap.dcMotor.get("DABR");
         TiltBoxR = hardwareMap.servo.get("s1");
         TiltBoxL = hardwareMap.servo.get("s2");
         OD = hardwareMap.opticalDistanceSensor.get("a0");
-        Light = hardwareMap.colorSensor.get("Color");
-        BL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        BeaconFinder = hardwareMap.colorSensor.get("Beacon");
+        LeftFloor = hardwareMap.colorSensor.get("Left");
+        RightFloor = hardwareMap.colorSensor.get("Right");
         BL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        FL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        BL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         FL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        BR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        FL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         BR.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        FR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        BR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         FR.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        ExtensionMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        FR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         ExtensionMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        ExtensionMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        Roller.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        Roller.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
     }
 
     void Move() {
@@ -153,5 +160,9 @@ public abstract class Fury_Bot extends OpMode {
         BL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         BR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         FR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+    }
+    public void setServoPos(Servo ser, double pos) {
+        if( pos <= 1 && pos >= -1)
+        ser.setPosition(pos);
     }
 }

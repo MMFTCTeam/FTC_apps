@@ -1,19 +1,16 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.robocol.Telemetry;
 
 /**
- * Created by sam on 07-Dec-15.
- * This is the class for All methods defined by ProgramBot
+ * Created by sam on 27-Dec-15.
  */
-public abstract class Programbot extends LinearOpMode {
+public class AutonWOInherit extends OpMode {
     public static final int LEFT_MOTORS_STOP = 0x01;
     public static final int RIGHT_MOTORS_STOP = 0x02;
     public static final int ALL_MOTORS_STOP = 0x03;
@@ -27,15 +24,22 @@ public abstract class Programbot extends LinearOpMode {
     public Servo Rbump;
     public OpticalDistanceSensor OD;
     public ColorSensor Light;
-    public ColorSensor Line;
     public double Lthrottle = gamepad1.left_stick_y;
     public double Rthrottle = gamepad1.right_stick_y;
     boolean enabled = false;
+    private RunState runState = RunState.RUN_STATE_IDLE;
 
+    enum RunState {
+        RUN_STATE_RUNNING,
+        RUN_STATE_DEAD,
+        RUN_STATE_IDLE
+    }
+
+    @Override
     /**
      *
      */
-    public void initializeRobot() {
+    public void init() {
         BL = hardwareMap.dcMotor.get("Bl");
         FL = hardwareMap.dcMotor.get("Fl");
         BR = hardwareMap.dcMotor.get("Br");
@@ -45,29 +49,62 @@ public abstract class Programbot extends LinearOpMode {
         Lbump = hardwareMap.servo.get("s2");
         OD = hardwareMap.opticalDistanceSensor.get("od");
         Light = hardwareMap.colorSensor.get("Color");
-        Line = hardwareMap.colorSensor.get("Lf");
         BL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         BL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        FL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        FL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         BR.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         BR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        FL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        FL.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
         FR.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        FR.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        FR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         OtherMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         OtherMotor.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-        //Debug
-        if (BL.getCurrentPosition() == 0 && BR.getCurrentPosition() == 0) {
-            System.out.println("Reset Encoders successfully");
-            telemetry.addData("ENCODERS STATUS", "Reset");
-
-        }
-        // End Debug
-
-        FL.setDirection(DcMotor.Direction.REVERSE);
-        BR.setDirection(DcMotor.Direction.REVERSE);
+        BL.setDirection(DcMotor.Direction.REVERSE);
+        FR.setDirection(DcMotor.Direction.REVERSE);
     }
 
+    public void loop() {
+        BL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        BR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        switch (runState) {
+            case RUN_STATE_IDLE:
+                ResetEncoders();
+                while (!gamepad1.a) {
+
+                }
+                runState = RunState.RUN_STATE_RUNNING;
+                break;
+            case RUN_STATE_RUNNING:
+                while (BR.getCurrentPosition() < 1125) {
+                    BR.setPower(1);
+                    FR.setPower(1);
+                    BL.setPower(1);
+                    FL.setPower(1);
+                    if (Light.red() > 0.5 || Light.blue() > 0.5) {
+                        runState = RunState.RUN_STATE_DEAD;
+                        break;
+                    }
+                }
+                if (Light.red() > 0.5 || Light.blue() > 0.5) {
+                    runState = RunState.RUN_STATE_DEAD;
+                }
+
+                runState = RunState.RUN_STATE_IDLE;
+                break;
+            case RUN_STATE_DEAD:
+                // do nothing
+                for(;;) {
+                    if (getRuntime() >= 30) {
+                        break;
+                    }
+                }
+                System.exit(0);
+        }
+        telemetry.addData("Blue", Light.blue());
+        telemetry.addData("Red", Light.red());
+        telemetry.addData("ALL COLOR INFO #AARRGGBB", "#" + Integer.toHexString(Light.argb()));
+        telemetry.addData("Run state", runState.toString());
+    }
     public void Move() {
         BL.setPower(1);
         FL.setPower(1);
@@ -83,6 +120,7 @@ public abstract class Programbot extends LinearOpMode {
     }
 
     public void Move(double power, int distance) {
+        ResetEncoders();
         while (BL.getCurrentPosition() < distance) {
             BL.setPower(power);
             FL.setPower(power);
@@ -154,10 +192,10 @@ public abstract class Programbot extends LinearOpMode {
     public int getHaltMotorStatus() {
         boolean lstop = false;
         boolean rstop = false;
-        if (BL.getPower() == 0 & FL.getPower() == 0) {
+        if (BL.getPower() == 0 && FL.getPower() == 0) {
             lstop = true;
         }
-        if (FR.getPower() == 0 & BR.getPower() == 0) {
+        if (FR.getPower() == 0 && BR.getPower() == 0) {
             rstop = true;
         }
         if (lstop) {
@@ -173,13 +211,13 @@ public abstract class Programbot extends LinearOpMode {
     }
 
     public void ResetEncoders() {
-        FL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        // FL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         BL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         BR.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        FR.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        FL.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-        BL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        BR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        FR.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        // FR.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        // FL.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        // BL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        // BR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        // FR.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
     }
 }
