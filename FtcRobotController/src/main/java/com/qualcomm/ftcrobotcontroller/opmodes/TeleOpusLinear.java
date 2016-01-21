@@ -1,42 +1,32 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
-import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 /**
  * <h1>
- * Created by sam on 30-Dec-15. <br><br>
- *     Updated on
- * TeleOpus Program V1.7.4 </h1>
+ * Created by Team 8521 on 30-Dec-15. <br><br>
+ *     Updated on 21-Jan-16
+ * TeleOpus Program V1.8.1 </h1>
+ * <h2>
+ *     Change log:
+ * </h2>
  * <p>
- * Key Mapping for Robot (Program Bot): <br><br>
- * Analog Joysticks: Move Robot <br>
- * DPad Up: Start top Motor Forward <br>
- * DPad Down: Start top Motor Backward <br>
- * L Joystick button: Zero Encoders <br>
- * L Bumper: extend servos <br>
- * R Bumper: retract servos <br>
- * Y Button: Light on <br>
- * X Button: Light off <br>
- * Home Button: Switch direction <br>
+ *     V1.8.1 -- <br>
+ *     Removed motors and sensors defined by programbot <br>
+ *     Migrated code to beta version of Fury Bot <br>
+ * </p>
+ * <h2>
+ *     Key Mapping: <br>
+ *     Analog Sticks: Move Robot <br>
+ *     Home button: Reverse Motors <br>
+ * </h2>
+ * <p>
+ *
  * </p>
  */
-public class TeleOpusLinear extends LinearOpMode {
-    public DcMotor FL;
-    public DcMotor FR;
-    public DcMotor OtherMotor;
-    public DcMotor BL;
-    public DcMotor BR;
-    // public ServoController sr;
-    public Servo Lbump;
-    public Servo Rbump;
-    public OpticalDistanceSensor OD;
-    public ColorSensor Light, Line;
+public class TeleOpusLinear extends Fury_Bot {
     private boolean reversed = false;
 
     /**
@@ -45,34 +35,9 @@ public class TeleOpusLinear extends LinearOpMode {
      * Starting code
      * </p>
      */
-    void initializeRobot() {
-        BL = hardwareMap.dcMotor.get("Bl");
-        FL = hardwareMap.dcMotor.get("Fl");
-        BR = hardwareMap.dcMotor.get("Br");
-        FR = hardwareMap.dcMotor.get("Fr");
-        OtherMotor = hardwareMap.dcMotor.get("a1");
-        Rbump = hardwareMap.servo.get("s1");
-        Lbump = hardwareMap.servo.get("s2");
-        OD = hardwareMap.opticalDistanceSensor.get("od");
-        Light = hardwareMap.colorSensor.get("Color");
-        Line = hardwareMap.colorSensor.get("Lf");
-        BL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        BL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        FL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        FL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        BR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        BR.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        FR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        FR.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        OtherMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        OtherMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        BL.setDirection(DcMotor.Direction.REVERSE);
-        FR.setDirection(DcMotor.Direction.REVERSE);
-        gamepad1.setJoystickDeadzone(0.01f);
-        Light.enableLed(true);
-        Line.enableLed(true);
-        Rbump.setPosition(1);
-        Lbump.setPosition(0);
+    @Override
+    public void initializeRobot() {
+        super.initializeRobot();
     }
 
     /**
@@ -108,7 +73,6 @@ public class TeleOpusLinear extends LinearOpMode {
             FL.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
             BR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
             FR.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-            OtherMotor.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
             if (!reversed) {
                 FL.setPower(scaleInput(gamepad1.left_stick_y));
                 BL.setPower(scaleInput(gamepad1.left_stick_y));
@@ -119,31 +83,6 @@ public class TeleOpusLinear extends LinearOpMode {
                 BL.setPower(scaleInput(gamepad1.right_stick_y));
                 FR.setPower(scaleInput(gamepad1.left_stick_y));
                 BR.setPower(scaleInput(gamepad1.left_stick_y));
-            }
-            if (gamepad1.a) {
-                OtherMotor.setPower(0);
-            }
-            if (gamepad1.dpad_up) {
-                OtherMotor.setPower(1);
-            }
-            if (gamepad1.dpad_down) {
-                OtherMotor.setPower(-1);
-            }
-            if (gamepad1.left_bumper) {
-                Rbump.setPosition(0.5);
-                Lbump.setPosition(0.5);
-            }
-            if (gamepad1.right_bumper) {
-                Lbump.setPosition(0);
-                Rbump.setPosition(1);
-            }
-            if (gamepad1.y) {
-                Light.enableLed(true);
-                Line.enableLed(true);
-            }
-            if (gamepad1.x) {
-                Light.enableLed(false);
-                Line.enableLed(false);
             }
             if (gamepad1.left_stick_button) {
                 BL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
@@ -178,15 +117,7 @@ public class TeleOpusLinear extends LinearOpMode {
                     // sleep(20);
                 }
             }
-            telemetry.addData("Color Sensor Red", Light.red());
-            telemetry.addData("Color Sensor Green", Light.green());
-            telemetry.addData("Color Sensor Blue", Light.blue());
-            telemetry.addData("Line Follower Red", Line.red());
-            telemetry.addData("Line Follower Green", Line.green());
-            telemetry.addData("Line Follower Blue", Line.blue());
-            telemetry.addData("Power", OtherMotor.getPower());
-            telemetry.addData("Distance", OD.getLightDetected());
-            telemetry.addData("Distance Raw", OD.getLightDetectedRaw());
+            telemetry.getTimestamp();
             telemetry.addData("Encoders", BL.getCurrentPosition() + "\n" + BR.getCurrentPosition());
             telemetry.addData("Reversed?", reversed);
 
