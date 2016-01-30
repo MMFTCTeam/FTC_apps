@@ -8,13 +8,17 @@ import com.qualcomm.robotcore.util.Range;
  * <h1>
  * Created by Sam on 30-Dec-15. <br><br>
  * Updated on 21-Jan-16
- * TeleOpus Program V1.9.1 </h1>
+ * TeleOpus Program V1.9.3 </h1>
  * <h2>
  * Change log:
  * </h2>
  * <p>
+ * V1.9.4 -- <br>
+ * Fixed bugs in arm and extension<br>
+ * V1.9.3 -- <br>
+ * Added Extension support
  * V1.9.1 -- <br>
- * Added Arm input
+ * Added Arm input <br>
  * V1.8.2 -- <br>
  * Modified scaleInput<br>
  * V1.8.1 -- <br>
@@ -24,9 +28,19 @@ import com.qualcomm.robotcore.util.Range;
  * <h2>
  * Key Mapping:
  * </h2>
+ * <h6>
+ *     Player 1:
+ * </h6>
  * <p>
  * Analog Sticks: Move Robot <br>
  * Home button: Reverse Motors <br>
+ * </p>
+ * <h6>
+ *     Player 2:
+ * </h6>
+ * <p>
+ *     Right Stick forward/back: Raise/Lower arm
+ *     Left Stick forward/back: Extend/Retract arm
  * </p>
  */
 public class TeleOpusLinear extends Fury_Bot {
@@ -42,7 +56,6 @@ public class TeleOpusLinear extends Fury_Bot {
     public void initializeRobot() {
         super.initializeRobot();
     }
-
     /**
      * Scales input from the joystick <br>
      * Note! Joystick forward returns negative values.
@@ -63,10 +76,8 @@ public class TeleOpusLinear extends Fury_Bot {
         }
         return retVal;
     }
-
     /**
      * Robot Main Loop
-     *
      * @throws InterruptedException
      */
     @Override
@@ -124,18 +135,8 @@ public class TeleOpusLinear extends Fury_Bot {
                     // sleep(20);
                 }
             }
-            if (gamepad2.left_bumper) {
-                while (gamepad2.left_bumper) {
-                    Crane.setPower(-1);
-                }
-                Crane.setPower(0);
-            }
-            if (gamepad2.right_bumper) {
-                while (gamepad2.right_bumper) {
-                    Crane.setPower(1);
-                }
-                Crane.setPower(0);
-            }
+            Crane.setPower(-gamepad2.right_stick_y);
+            Ext.setPower(gamepad2.left_stick_y);
             telemetry.getTimestamp();
             telemetry.addData("Encoders", BL.getCurrentPosition() + "\n" + BR.getCurrentPosition());
             telemetry.addData("Reversed?", reversed);
