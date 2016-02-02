@@ -7,43 +7,51 @@ import com.qualcomm.robotcore.util.Range;
 /**
  * <h1>
  * Created by Sam on 30-Dec-15. <br><br>
- * Updated on 21-Jan-16
- * TeleOpus Program V1.9.3 </h1>
+ * Updated on 01-Feb-16
+ * TeleOpus Program V1.9.5</h1>
  * <h2>
  * Change log:
  * </h2>
  * <p>
+ * V1.9.6 -- <br>
+ * *Modified limits to crane and extension <br>
+ * +Added Limit Overrides <br>
+ * V1.9.5 -- <br>
+ * +Added limits to Crane and extension <br>
  * V1.9.4 -- <br>
- * Fixed bugs in arm and extension<br>
+ * *Fixed bugs in arm and extension<br>
  * V1.9.3 -- <br>
- * Added Extension support
+ * +Added Extension support
  * V1.9.1 -- <br>
- * Added Arm input <br>
+ * +Added Arm input <br>
  * V1.8.2 -- <br>
- * Modified scaleInput<br>
+ * *Modified scaleInput<br>
  * V1.8.1 -- <br>
- * Removed motors and sensors defined by programbot <br>
- * Migrated code to beta version of Fury Bot <br>
+ * *Migrated code to beta version of Fury Bot <br>
+ * -Removed motors and sensors defined by programbot <br>
  * </p>
  * <h2>
  * Key Mapping:
  * </h2>
  * <h6>
- *     Player 1:
+ * Player 1:
  * </h6>
  * <p>
  * Analog Sticks: Move Robot <br>
  * Home button: Reverse Motors <br>
  * </p>
  * <h6>
- *     Player 2:
+ * Player 2:
  * </h6>
  * <p>
- *     Right Stick forward/back: Raise/Lower arm
- *     Left Stick forward/back: Extend/Retract arm
+ * Right Stick forward/back: Raise/Lower arm <br>
+ * Left Stick forward/back: Extend/Retract arm <br>
+ * Home Button(hold): Disable/Override limits <br>
  * </p>
  */
 public class TeleOpusLinear extends Fury_Bot {
+    double cThrottle;
+    double eThrottle;
     private boolean reversed = false;
 
     /**
@@ -56,6 +64,7 @@ public class TeleOpusLinear extends Fury_Bot {
     public void initializeRobot() {
         super.initializeRobot();
     }
+
     /**
      * Scales input from the joystick <br>
      * Note! Joystick forward returns negative values.
@@ -76,8 +85,10 @@ public class TeleOpusLinear extends Fury_Bot {
         }
         return retVal;
     }
+
     /**
      * Robot Main Loop
+     *
      * @throws InterruptedException
      */
     @Override
@@ -86,7 +97,6 @@ public class TeleOpusLinear extends Fury_Bot {
         waitForStart();
         waitOneFullHardwareCycle();
         while (opModeIsActive()) {
-            String Powers = "BL: \n" + BL.getPower() + "\n BR: \n" + BR.getPower() + "\n FL: \n" + FL.getPower() + "\n FR \n" + FR.getPower();
             BL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
             FL.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
             BR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
@@ -101,12 +111,6 @@ public class TeleOpusLinear extends Fury_Bot {
                 BL.setPower(scaleInput(gamepad1.right_stick_y));
                 FR.setPower(scaleInput(gamepad1.left_stick_y));
                 BR.setPower(scaleInput(gamepad1.left_stick_y));
-            }
-            if (gamepad1.left_stick_button) {
-                BL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-                // BL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-                BR.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-                // BR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
             }
             if (gamepad1.guide) {
                 telemetry.addData("Guide pressed?", gamepad1.guide);
@@ -132,15 +136,45 @@ public class TeleOpusLinear extends Fury_Bot {
                     } else {
                         BR.setDirection(DcMotor.Direction.FORWARD);
                     }
-                    // sleep(20);
                 }
             }
-            Crane.setPower(-gamepad2.right_stick_y);
-            Ext.setPower(gamepad2.left_stick_y);
-            telemetry.getTimestamp();
-            telemetry.addData("Encoders", BL.getCurrentPosition() + "\n" + BR.getCurrentPosition());
-            telemetry.addData("Reversed?", reversed);
-            telemetry.addData("Motor's Powers", Powers);
+            // begin Crane limits
+            if (!gamepad2.guide) {
+                cThrottle = -gamepad2.right_stick_y;
+                if (Crane.getCurrentPosition() < 0) {
+                    Crane.setPower(cThrottle > 0 ? cThrottle : 0);
+                } else if (Crane.getCurrentPosition() > 1000) {
+                    Crane.setPower(cThrottle < 0 ? cThrottle : 0);
+                } else {
+                    Crane.setPower(cThrottle);
+                }
+                // end Crane Limits
+                // begin Extension limits
+                eThrottle = -gamepad2.left_stick_y;
+                if (Ext.getCurrentPosition() < 0) {
+                    Ext.setPower(eThrottle > 0 ? eThrottle : 0);
+                } else if (Ext.getCurrentPosition() > 1000) {
+                    Ext.setPower(eThrottle < 0 ? eThrottle : 0);
+                } else {
+                    Ext.setPower(eThrottle);
+                }
+            }
+            // Override limits
+            else {
+                Crane.setPower(-gamepad2.right_stick_y);
+                Ext.setPower(-gamepad2.left_stick_y);
+            }
+            if (gamepad2.right_bumper) {
+                Crane.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+                Crane.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+            }
+            if (gamepad2.left_bumper) {
+                Ext.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+                Ext.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+            }
+            // end Extension Limits
+            // telemetry.addData("Encoders", BL.getCurrentPosition() + "\n" + BR.getCurrentPosition());
+            // telemetry.addData("Reversed?", reversed);
             waitForNextHardwareCycle();
         }
     }
