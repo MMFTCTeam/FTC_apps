@@ -43,7 +43,7 @@ public class TeleOpusLinear extends LinearOpMode {
         FR.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         OtherMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         OtherMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        BL.setDirection(DcMotor.Direction.REVERSE);
+        BR.setDirection(DcMotor.Direction.REVERSE);
         FR.setDirection(DcMotor.Direction.REVERSE);
         gamepad1.setJoystickDeadzone(0.01f);
         Light.enableLed(true);
