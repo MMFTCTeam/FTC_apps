@@ -19,17 +19,15 @@ public abstract class Fury_Bot extends LinearOpMode {
     public DcMotor BL;
     public DcMotor BR;
     public DcMotor Crane;
-    public ColorSensor BeaconFinder;
-    public ColorSensor LeftFloor;
+    public ColorSensor Line;
+    // public Servo DoorL;
+    // public Servo DoorR;
     // public ServoController sr;
-    // public Servo TiltBoxL;
-    // public Servo TiltBoxR;
     // public OpticalDistanceSensor OD;
     // public ColorSensor RightFloor;
     public double Lthrottle = gamepad1.left_stick_y;
     public double Rthrottle = gamepad1.right_stick_y;
     boolean enabled = false;
-
     /**
      * init statement
      */
@@ -40,9 +38,10 @@ public abstract class Fury_Bot extends LinearOpMode {
         FR = hardwareMap.dcMotor.get("Fr");
         Crane = hardwareMap.dcMotor.get("arm");
         Ext = hardwareMap.dcMotor.get("ext");
-        /*TiltBoxR = hardwareMap.servo.get("s1");
-        TiltBoxL = hardwareMap.servo.get("s2");
-        OD = hardwareMap.opticalDistanceSensor.get("a0");
+        Line = hardwareMap.colorSensor.get("Line");
+        // DoorL = hardwareMap.servo.get("L");
+        // DoorR = hardwareMap.servo.get("R");
+        /*OD = hardwareMap.opticalDistanceSensor.get("a0");
         BeaconFinder = hardwareMap.colorSensor.get("Beacon");
         LeftFloor = hardwareMap.colorSensor.get("Left");
         RightFloor = hardwareMap.colorSensor.get("Right");
@@ -53,13 +52,12 @@ public abstract class Fury_Bot extends LinearOpMode {
         FR.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         FR.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
         BL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        BL.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        BL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         BR.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        BR.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        BR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         FL.setDirection(DcMotor.Direction.REVERSE);
         BL.setDirection(DcMotor.Direction.REVERSE);
     }
-
     public double scaleInput(double value) {
         double[] powerval = {0, 0.1, 0.2, 0.2, 0.5, 0.5, 0.5, 0.7, 0.7, 0.9, 1.0};
         double retVal;
