@@ -8,13 +8,15 @@ import com.qualcomm.robotcore.util.Range;
  * <h1>
  * Created by Sam on 30-Dec-15. <br><br>
  * Updated on 01-Feb-16
- * TeleOpus Program V1.9.5</h1>
+ * TeleOpus Program V1.9.7</h1>
  * <h2>
  * Change log:
  * </h2>
  * <p>
+ * V1.9.7 -- <br>
+ * *Tweaked limits to crane motor
  * V1.9.6 -- <br>
- * *Modified limits to crane and extension <br>
+ * *Modified limits to crane and extension motor <br>
  * +Added Limit Overrides <br>
  * V1.9.5 -- <br>
  * +Added limits to Crane and extension <br>
@@ -143,7 +145,7 @@ public class TeleOpusLinear extends Fury_Bot {
                 cThrottle = -gamepad2.right_stick_y;
                 if (Crane.getCurrentPosition() < 0) {
                     Crane.setPower(cThrottle > 0 ? cThrottle : 0);
-                } else if (Crane.getCurrentPosition() > 1000) {
+                } else if (Crane.getCurrentPosition() > 21000) {
                     Crane.setPower(cThrottle < 0 ? cThrottle : 0);
                 } else {
                     Crane.setPower(cThrottle);
@@ -164,17 +166,19 @@ public class TeleOpusLinear extends Fury_Bot {
                 Crane.setPower(-gamepad2.right_stick_y);
                 Ext.setPower(-gamepad2.left_stick_y);
             }
-            if (gamepad2.right_bumper) {
+            if (gamepad2.right_bumper && gamepad2.guide) {
                 Crane.setMode(DcMotorController.RunMode.RESET_ENCODERS);
                 Crane.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
             }
-            if (gamepad2.left_bumper) {
+            if (gamepad2.left_bumper && gamepad2.guide) {
                 Ext.setMode(DcMotorController.RunMode.RESET_ENCODERS);
                 Ext.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
             }
             // end Extension Limits
             // telemetry.addData("Encoders", BL.getCurrentPosition() + "\n" + BR.getCurrentPosition());
             // telemetry.addData("Reversed?", reversed);
+            telemetry.addData("Crane Encoder", Crane.getCurrentPosition());
+            telemetry.addData("Ext Encoder", Ext.getCurrentPosition());
             waitForNextHardwareCycle();
         }
     }
