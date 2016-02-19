@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorController;
  * Beta 1.3
  * </h1>
  * Created by sam on 05-Jan-16. <br>
- * Autonomous Program for red<br>
+ * Autonomous Program for red <br>
  */
 public class AutonomousClimbRed extends Programbot {
     @Override
