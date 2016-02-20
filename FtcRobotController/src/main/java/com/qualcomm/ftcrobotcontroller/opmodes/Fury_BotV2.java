@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
-import com.qualcomm.robotcore.util.Range;
+//import com.qualcomm.robotcore.util.Range;
 
 /**
  * Created by sam on 07-Dec-15.
@@ -19,7 +19,7 @@ public abstract class Fury_BotV2 extends LinearOpMode {
     public DcMotor BL;
     public DcMotor BR;
     public DcMotor Crane;
-    public ColorSensor Line;
+    //public ColorSensor Line;
     public DcMotor hook;
     // public Servo DoorL;
     // public Servo DoorR;
@@ -39,7 +39,7 @@ public abstract class Fury_BotV2 extends LinearOpMode {
         FR = hardwareMap.dcMotor.get("Fr");
         Crane = hardwareMap.dcMotor.get("arm");
         Ext = hardwareMap.dcMotor.get("ext");
-        Line = hardwareMap.colorSensor.get("Line");
+        //Line = hardwareMap.colorSensor.get("Line");
         hook = hardwareMap.dcMotor.get("Hook");
         // DoorL = hardwareMap.servo.get("L");
         // DoorR = hardwareMap.servo.get("R");
@@ -62,7 +62,7 @@ public abstract class Fury_BotV2 extends LinearOpMode {
         FL.setDirection(DcMotor.Direction.REVERSE);
         BL.setDirection(DcMotor.Direction.REVERSE);
     }
-    public double scaleInput(double value) {
+    /*public double scaleInput(double value) {
         double[] powerval = {0, 0.1, 0.2, 0.2, 0.5, 0.5, 0.5, 0.7, 0.7, 0.9, 1.0};
         double retVal;
         int index;
@@ -74,7 +74,7 @@ public abstract class Fury_BotV2 extends LinearOpMode {
             retVal = -powerval[index];
         }
         return retVal;
-    }
+    }*/
     void ResetEncoders() {
         FL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         BL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
