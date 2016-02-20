@@ -31,11 +31,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegister;
-
-import junit.framework.Test;
 
 /**
  * Register Op Modes
@@ -60,14 +57,15 @@ public class FtcOpModeRegister implements OpModeRegister {
         manager.register("NullOp", NullOp.class);
 
         //manager.register("MatrixK9TeleOp", MatrixK9TeleOp.class);
-        manager.register("K9TeleOp", K9TeleOp.class);
-        manager.register("K9Line", K9Line.class);
+        //manager.register("K9TeleOp", K9TeleOp.class);
+       // manager.register("K9Line", K9Line.class);
         manager.register("PushBotAuto", PushBotAuto.class);
         manager.register("PushBotManual", PushBotManual.class);
-        manager.register("Encoders", EncoderTest.class);
-        manager.register("TELEopus", TeleOpus.class);
-        manager.register("Parallel Processing for n00bs",TeleOpPARALLEL.class);
-        manager.register("Testing", TestMotors.class);
+        //manager.register("Encoders", EncoderTest.class);
+        //manager.register("TELEopus", TeleOpus.class);
+        //manager.register("Parallel Processing for n00bs",TeleOpPARALLEL.class);
+        //manager.register("Testing", TestMotors.class);
+        manager.register("TeleOpus", TeleOpusLinear.class);
 
 
 

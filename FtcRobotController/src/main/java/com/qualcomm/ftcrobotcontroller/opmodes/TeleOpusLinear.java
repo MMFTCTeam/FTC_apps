@@ -172,6 +172,30 @@ public class TeleOpusLinear extends Fury_Bot {
                 Ext.setMode(DcMotorController.RunMode.RESET_ENCODERS);
                 Ext.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
             }
+
+            /*if((gamepad1.left_bumper = true) && (gamepad1.right_bumper = false))
+            {
+
+                Hook.setTargetPosition(0);
+
+            }
+
+            if((gamepad1.right_bumper = true) && (gamepad1.left_bumper = false))
+            {
+
+                Hook.setTargetPosition(500);
+
+            }
+
+            if((gamepad1.right_bumper = false) && (gamepad1.left_bumper = false))
+            {
+
+                Hook.setPower(0);
+
+            }*/
+
+
+
             // end Extension Limits
             // telemetry.addData("Encoders", BL.getCurrentPosition() + "\n" + BR.getCurrentPosition());
             // telemetry.addData("Reversed?", reversed);

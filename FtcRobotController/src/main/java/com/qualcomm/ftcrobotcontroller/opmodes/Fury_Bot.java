@@ -19,6 +19,7 @@ public abstract class Fury_Bot extends LinearOpMode {
     public DcMotor BL;
     public DcMotor BR;
     public DcMotor Crane;
+    //public DcMotor Hook;
     public ColorSensor BeaconFinder;
     public ColorSensor LeftFloor;
     // public ServoController sr;
@@ -40,6 +41,7 @@ public abstract class Fury_Bot extends LinearOpMode {
         FR = hardwareMap.dcMotor.get("Fr");
         Crane = hardwareMap.dcMotor.get("arm");
         Ext = hardwareMap.dcMotor.get("ext");
+        //Hook = hardwareMap.dcMotor.get("Hook");
         /*TiltBoxR = hardwareMap.servo.get("s1");
         TiltBoxL = hardwareMap.servo.get("s2");
         OD = hardwareMap.opticalDistanceSensor.get("a0");
@@ -58,6 +60,8 @@ public abstract class Fury_Bot extends LinearOpMode {
         BR.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
         FL.setDirection(DcMotor.Direction.REVERSE);
         BL.setDirection(DcMotor.Direction.REVERSE);
+
+        //Hook.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
     }
 
     public double scaleInput(double value) {
@@ -78,9 +82,11 @@ public abstract class Fury_Bot extends LinearOpMode {
         BL.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         BR.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         FR.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        //Hook.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         FL.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
         BL.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         BR.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         FR.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        //Hook.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
     }
 }
