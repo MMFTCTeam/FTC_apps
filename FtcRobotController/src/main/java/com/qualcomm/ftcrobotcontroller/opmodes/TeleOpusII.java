@@ -39,6 +39,7 @@ public class TeleOpusII extends LinearOpMode {
         Ext = hardwareMap.dcMotor.get("ext");
         // Line = hardwareMap.colorSensor.get("Line");
         hook = hardwareMap.dcMotor.get("Hook");
+        Ext.setDirection(DcMotor.Direction.FORWARD);
         hook.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         hook.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
     }
@@ -67,9 +68,9 @@ public class TeleOpusII extends LinearOpMode {
                 // end Crane Limits
                 // begin Extension limits
                 eThrottle = -gamepad2.left_stick_y;
-                if (Ext.getCurrentPosition() < 0) {
+                if (Ext.getCurrentPosition() > 0) {
                     Ext.setPower(eThrottle > 0 ? eThrottle : 0);
-                } else if (Ext.getCurrentPosition() > 1000) {
+                } else if (Ext.getCurrentPosition() < -5000) {
                     Ext.setPower(eThrottle < 0 ? eThrottle : 0);
                 } else {
                     Ext.setPower(eThrottle);
@@ -83,14 +84,29 @@ public class TeleOpusII extends LinearOpMode {
             if (gamepad2.right_bumper && gamepad2.guide) {
                 Crane.setMode(DcMotorController.RunMode.RESET_ENCODERS);
                 Crane.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+                if (Crane.getCurrentPosition() == 0) {
+                    telemetry.addData("Crane Status", "Successful");
+                } else {
+                    telemetry.addData("Crane Status", "Failure");
+                }
             }
             if (gamepad2.left_bumper && gamepad2.guide) {
                 Ext.setMode(DcMotorController.RunMode.RESET_ENCODERS);
                 Ext.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+                if (Ext.getCurrentPosition() == 0) {
+                    telemetry.addData("Ext Status", "Successful");
+                } else {
+                    telemetry.addData("Ext Status", "Failure");
+                }
             }
             //hook right and left bumper
-            hook.setPower(gamepad1.right_trigger);
-            hook.setPower(-gamepad1.left_trigger);
+            if (gamepad1.right_trigger > 0) {
+                hook.setPower(gamepad1.right_trigger);
+            } else if (gamepad1.left_trigger > 0) {
+                hook.setPower(-gamepad1.left_trigger);
+            } else {
+                hook.setPower(0);
+            }
             /* if(gamepad1.right_bumper){
                 if(hook.getCurrentPosition()<130) {
                     hook.setPower(.2);
