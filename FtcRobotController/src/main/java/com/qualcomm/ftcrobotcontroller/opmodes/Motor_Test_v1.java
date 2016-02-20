@@ -53,18 +53,23 @@ public class Motor_Test_v1 extends LinearOpMode{
 
             //hook right and left bumper
             if(gamepad1.right_bumper){
-                if(hook.getCurrentPosition()<130) {
+               // while(hook.getCurrentPosition()<500) {
                     hook.setPower(.2);
-                }
+                //}
+
+                //hook.setPower(0);
             }
             if(gamepad1.left_bumper){
-                if(hook.getCurrentPosition()>0) {
+                //while(hook.getCurrentPosition()>0) {
                     hook.setPower(-.2);
-                }
+                //}
+
+                //hook.setPower(0);
             }
             if(!(gamepad1.right_bumper) && ! (gamepad1.left_bumper)){
                 hook.setPower(0);
             }
+            telemetry.addData("Hook Encoder", hook.getCurrentPosition());
             waitForNextHardwareCycle();
         }
     }
