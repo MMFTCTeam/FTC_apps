@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.hardware.DcMotorController;
  */
 public class AutonomousClimbRed extends Programbot {
     @Override
-    public void initializeRobot() throws InterruptedException {
+    public void initializeRobot(){
         super.initializeRobot();
     }
 

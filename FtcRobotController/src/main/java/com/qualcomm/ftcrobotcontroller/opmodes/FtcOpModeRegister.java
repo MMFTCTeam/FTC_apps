@@ -73,6 +73,7 @@ public class FtcOpModeRegister implements OpModeRegister {
         manager.register("Autonomous Trevor", BeaconAuton_v1.class);
         manager.register("It should work better", AutonWOInherit.class);
         manager.register("Autonomous II", Autonomous2.class);
+        manager.register("test", test.class);
     /*
      * Uncomment any of the following lines if you want to register an op mode.
      */
