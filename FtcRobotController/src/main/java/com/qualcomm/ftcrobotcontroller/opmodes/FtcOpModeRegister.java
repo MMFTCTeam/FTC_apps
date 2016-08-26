@@ -58,8 +58,9 @@ public class FtcOpModeRegister implements OpModeRegister {
      */
 
         manager.register("NullOp", NullOp.class);
+        manager.register("Autonomous", PracticeAutonv1.class);
 
-        //manager.register("MatrixK9TeleOp", MatrixK9TeleOp.class);
+        /*manager.register("MatrixK9TeleOp", MatrixK9TeleOp.class);
         manager.register("K9TeleOp", K9TeleOp.class);
         manager.register("K9Line", K9Line.class);
         manager.register("PushBotAuto", PushBotAuto.class);
@@ -67,7 +68,7 @@ public class FtcOpModeRegister implements OpModeRegister {
         manager.register("Encoders", EncoderTest.class);
         manager.register("TELEopus", TeleOpus.class);
         manager.register("Parallel Processing for n00bs",TeleOpPARALLEL.class);
-        manager.register("Testing", TestMotors.class);
+        manager.register("Testing", TestMotors.class);*/
 
 
 
