@@ -1,11 +1,14 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import android.graphics.Color;
+import android.hardware.Sensor;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.GyroSensor;
+import com.qualcomm.robotcore.util.Range;
 
 import java.util.Vector;
 
@@ -25,11 +28,18 @@ public class teleoppractice extends LinearOpMode{
     public boolean BottomLightEnabled;
     public boolean CurrentState;
     public boolean PrevState;
+    public boolean CurrentDir;
+    public boolean PrevDir;
+    public boolean MechanumWheels;
+    public boolean reverseDir;
 
     public String colorname;
 
     public ColorSensor sensor;
     public ColorSensor sensor1;
+
+    public Sensor GYRO_SENSOR;
+    public GyroSensor GYRO;
 
     float hsvValues[] = {0F,0F,0F};
     final float values[] = hsvValues;
@@ -37,6 +47,11 @@ public class teleoppractice extends LinearOpMode{
     float hsvValues1[] = {0F,0F,0F};
     final float values1[] = hsvValues1;
     */
+
+    float direction;
+    float vertDirection;
+    float horizontalDirection;
+
     public void initializeRobot(){
         BL = hardwareMap.dcMotor.get("Bl");
         BR = hardwareMap.dcMotor.get("Br");
@@ -53,13 +68,35 @@ public class teleoppractice extends LinearOpMode{
         BottomLightEnabled = false;
         CurrentState = false;
         PrevState = false;
+        CurrentDir = false;
+        PrevDir = false;
+        MechanumWheels = false;
+        reverseDir = false;
 
         colorname = "null";
 
         FR.setDirection(DcMotor.Direction.REVERSE);
         BR.setDirection(DcMotor.Direction.REVERSE);
-    }
 
+        direction = 0f;
+        vertDirection = 0f;
+        horizontalDirection = 0f;
+    }
+    /*
+    public double scaleInput(double value) {
+        double[] powerval = {0, 0, 0.25, 0.25, 0.5, 0.5, 0.5, 0.75, 0.75, 1.0, 1.0};
+        double retVal;
+        int index;
+        if (value > 0) {
+            index = (int) Math.abs(Range.clip(value * 10, 0, 10));
+            retVal = powerval[index];
+        } else {
+            index = (int) Math.abs(Range.clip(value * -10, 0, 10));
+            retVal = -powerval[index];
+        }
+        return retVal;
+    }
+    */
     public void runOpMode() throws InterruptedException {
         initializeRobot();
         waitForStart();
@@ -77,7 +114,7 @@ public class teleoppractice extends LinearOpMode{
 
                 sensor.enableLed(lightEnabled);
                 sensor1.enableLed(BottomLightEnabled);
-                Thread.sleep(500);
+                Thread.sleep(100);
             }
             else if(CurrentState == true && PrevState == CurrentState) {
                 PrevState = false;
@@ -86,13 +123,111 @@ public class teleoppractice extends LinearOpMode{
 
                 sensor.enableLed(lightEnabled);
                 sensor1.enableLed(BottomLightEnabled);
-                Thread.sleep(500);
+                Thread.sleep(100);
             }
-            BL.setPower(gamepad1.left_stick_y);
-            FL.setPower(gamepad1.left_stick_y);
-            BR.setPower(gamepad1.right_stick_y);
-            FR.setPower(gamepad1.right_stick_y);
+            if(!MechanumWheels) {
+                CurrentDir = gamepad1.a;
 
+                if(CurrentDir == true && PrevDir != CurrentDir) {
+                    PrevDir = CurrentDir;
+                    reverseDir = true;
+                    Thread.sleep(100);
+                }
+                else if(CurrentDir == true && PrevDir == CurrentDir) {
+                    PrevDir = false;
+                    reverseDir = false;
+                    Thread.sleep(100);
+                }
+                if(reverseDir) {
+                    BL.setPower(gamepad1.left_stick_y);
+                    FL.setPower(gamepad1.left_stick_y);
+                    BR.setPower(gamepad1.right_stick_y);
+                    FR.setPower(gamepad1.right_stick_y);
+                }
+                else if(!reverseDir){
+                    //reversed dir
+                    BL.setPower(-gamepad1.left_stick_y);
+                    FL.setPower(-gamepad1.left_stick_y);
+                    BR.setPower(-gamepad1.right_stick_y);
+                    FR.setPower(-gamepad1.right_stick_y);
+                }
+            }
+            if(MechanumWheels) {
+                /*
+                //possibly working mechanum wheel code
+                double x = gamepad1.left_stick_x, //Get the left-right axis on the first stick
+                       y = gamepad1.left_stick_y, //Get the forward-backward axis on the first stick
+                       r = gamepad1.right_stick_x; //Get the left-right axis on the second stick (steering)
+
+                double v_FrontLeft  = r-y-x,
+                        v_FrontRight = r+y+x,
+                        v_BackLeft   = r-y+x,
+                        v_BackRight  = r+y-x;
+
+                double f = 1;
+                if(Math.abs(v_FrontLeft)  > f) f = v_FrontLeft;
+                if(Math.abs(v_FrontRight) > f) f = v_FrontRight;
+                if(Math.abs(v_BackLeft)  > f) f = v_BackLeft;
+                if(Math.abs(v_BackRight) > f) f = v_BackRight;
+
+                FL.setPower(v_FrontLeft / f);
+                FR.setPower(v_FrontRight / f);
+                BL.setPower(v_BackLeft / f);
+                BR.setPower(v_BackLeft / f);
+                */
+
+                CurrentDir = gamepad1.a;
+
+                if(CurrentDir == true && PrevDir != CurrentDir) {
+                    PrevDir = CurrentDir;
+                    reverseDir = true;
+                    Thread.sleep(5);
+                }
+                else if(CurrentDir == true && PrevDir == CurrentDir) {
+                    PrevDir = false;
+                    reverseDir = false;
+                    Thread.sleep(5);
+                }
+
+                if(!reverseDir) {
+                    //possibly working code
+                    final double threshold = 20;
+
+                    if (Math.abs(100 * gamepad1.left_stick_y) > threshold || Math.abs(gamepad1.left_stick_x) > threshold) {
+                        //move
+                        FR.setPower(((100 * gamepad1.left_stick_y) - (100 * gamepad1.left_stick_x)) / 2);
+                        FR.setPower((-(100 * gamepad1.left_stick_y) - (100 * gamepad1.left_stick_x)) / 2);
+                        BR.setPower((-(100 * gamepad1.left_stick_y) - (100 * gamepad1.left_stick_x)) / 2);
+                        BL.setPower(((100 * gamepad1.left_stick_y) - (100 * gamepad1.left_stick_x)) / 2);
+                    }
+                    if (Math.abs(gamepad1.right_stick_x) > threshold) {
+                        //rotate
+                        FR.setPower((100 * (-gamepad1.right_stick_x)) / 2);
+                        FL.setPower((100 * (-gamepad1.right_stick_x)) / 2);
+                        BR.setPower((100 * gamepad1.right_stick_x) / 2);
+                        BL.setPower((100 * gamepad1.right_stick_x) / 2);
+                    }
+                }
+                if(reverseDir) {
+                    //reversed dir
+                    final double threshold = 20;
+
+                    if (Math.abs(100 * gamepad1.left_stick_y) > threshold || Math.abs(gamepad1.left_stick_x) > threshold) {
+                        //move
+                        FR.setPower(-((100 * gamepad1.left_stick_y) - (100 * gamepad1.left_stick_x)) / 2);
+                        FR.setPower(-(-(100 * gamepad1.left_stick_y) - (100 * gamepad1.left_stick_x)) / 2);
+                        BR.setPower(-(-(100 * gamepad1.left_stick_y) - (100 * gamepad1.left_stick_x)) / 2);
+                        BL.setPower(-((100 * gamepad1.left_stick_y) - (100 * gamepad1.left_stick_x)) / 2);
+                    }
+                    if (Math.abs(gamepad1.right_stick_x) > threshold) {
+                        //rotate
+                        FR.setPower(-(100 * (-gamepad1.right_stick_x)) / 2);
+                        FL.setPower(-(100 * (-gamepad1.right_stick_x)) / 2);
+                        BR.setPower(-(100 * gamepad1.right_stick_x) / 2);
+                        BL.setPower(-(100 * gamepad1.right_stick_x) / 2);
+                    }
+                }
+            }
             if(sensor.blue()>sensor.green() && sensor.blue()>sensor.red()){
                 blue = true;
             }
@@ -116,6 +251,7 @@ public class teleoppractice extends LinearOpMode{
 
             Color.RGBToHSV(sensor.red()*8, sensor.green()*8, sensor.blue()*8, hsvValues);
 
+            telemetry.addData("Gyro Sensor: ", GYRO_SENSOR.TYPE_GYROSCOPE);
             telemetry.addData("Clear: ", sensor.alpha());
             telemetry.addData("Green: ", sensor.green());
             telemetry.addData("Blue: ", sensor.blue());

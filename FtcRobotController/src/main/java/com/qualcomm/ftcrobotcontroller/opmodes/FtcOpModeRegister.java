@@ -65,16 +65,21 @@ public class FtcOpModeRegister implements OpModeRegister {
         //manager.register("PushBotAuto", PushBotAuto.class);
         //manager.register("PushBotManual", PushBotManual.class);
         // manager.register("Encoders", EncoderTest.class);
-        manager.register("TELEopus", TeleOpus.class);
-        manager.register("TELEopus Linear", TeleOpusLinear.class);
+        //manager.register("TELEopus", TeleOpus.class);
+        //manager.register("TELEopus Linear", TeleOpusLinear.class);
         // manager.register("Parallel Processing for n00bs",TeleOpPARALLEL.class);
         // manager.register("Testing", TestMotors.class);
-        manager.register("Line following", FollowTheLine.class);
-        manager.register("Autonomous Trevor", BeaconAuton_v1.class);
-        manager.register("It should work better", AutonWOInherit.class);
-        manager.register("Autonomous II", Autonomous2.class);
-        manager.register("teleopusv2",TeleopV2_0.class);
-        manager.register("Test", Motor_Test_v1.class);
+        //manager.register("Line following", FollowTheLine.class);
+        //manager.register("Autonomous Trevor", BeaconAuton_v1.class);
+        //manager.register("It should work better", AutonWOInherit.class);
+        //manager.register("Autonomous II", Autonomous2.class);
+        //manager.register("teleopusv2",TeleopV2_0.class);
+        //manager.register("TeleOp", Motor_Test_v1.class);
+        //manager.register("autonomous", AutonomousV1.class);
+        manager.register("TeleOp", teleoppractice.class);
+        manager.register("Autonomous", PracticeAutonv1.class);
+        manager.register("ColorSensorTest", MRRGBExample.class);
+        manager.register("OD_SensorTest", PractiveAutoV2.class);
     /*
      * Uncomment any of the following lines if you want to register an op mode.
      */

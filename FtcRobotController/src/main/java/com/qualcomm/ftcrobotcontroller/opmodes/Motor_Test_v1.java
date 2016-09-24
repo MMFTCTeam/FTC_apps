@@ -69,14 +69,15 @@ public class Motor_Test_v1 extends LinearOpMode{
             BR.setPower(scaleInput(gamepad1.right_stick_y));
             //arm
             if (!gamepad2.guide) {
-                cThrottle = -gamepad2.right_stick_y;
+                /*cThrottle = -gamepad2.right_stick_y;
                 if (Crane.getCurrentPosition() < 0) {
                     Crane.setPower(cThrottle > 0 ? cThrottle : 0);
-                } else if (Crane.getCurrentPosition() > 24000) {
+                //} else if (Crane.getCurrentPosition() > 24000) {
                     Crane.setPower(cThrottle < 0 ? cThrottle : 0);
                 } else {
                     Crane.setPower(cThrottle);
-                }
+                }*/
+                Crane.setPower(-gamepad2.right_stick_y);
                 // end Crane Limits
                 // begin Extension limits
                 eThrottle = -gamepad2.left_stick_y;
@@ -111,6 +112,8 @@ public class Motor_Test_v1 extends LinearOpMode{
             if(!(gamepad1.right_bumper) && ! (gamepad1.left_bumper)){
                 hook.setPower(0);
             }
+            telemetry.addData("Back Left", BL.getCurrentPosition());
+            telemetry.addData("Back Right", BR.getCurrentPosition());
             telemetry.addData("Hook Encoder", hook.getCurrentPosition());
             telemetry.addData("Extension Encoder", Ext.getCurrentPosition());
             telemetry.addData("Crane Encoder", Crane.getCurrentPosition());//-13852
